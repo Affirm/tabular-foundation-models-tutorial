@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>An Interactive Guide to Tabular Foundation Models</title>
+  <meta name="description" content="An educational guide to tabular foundation models for the NeurIPS 2026 Education Track.">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #172033;
+      background: #f6f7fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header,
+    main,
+    footer {
+      width: min(100% - 40px, 960px);
+      margin-inline: auto;
+    }
+
+    header {
+      padding-block: 24px;
+      font-size: 0.8rem;
+      color: #5f6272;
+    }
+
+    main {
+      display: grid;
+      align-content: center;
+      padding-block: 64px;
+    }
+
+    .status {
+      width: fit-content;
+      margin: 0 0 24px;
+      padding: 7px 12px;
+      border: 1px solid #cccdd4;
+      border-radius: 999px;
+      color: #3131a3;
+      background: #fff;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(2.5rem, 8vw, 5.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    p {
+      max-width: 620px;
+      margin: 28px 0 0;
+      color: #5f6272;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.6;
+    }
+
+    footer {
+      padding-block: 24px;
+      border-top: 1px solid #dddee2;
+      color: #777a88;
+      font-size: 0.78rem;
+    }
+  </style>
+</head>
+<body>
+  <header>NeurIPS 2026 · Education Track</header>
+  <main>
+    <div>
+      <div class="status">In preparation</div>
+      <h1>An Interactive Guide to Tabular Foundation Models</h1>
+      <p>
+        A visual introduction to how pretrained models use labeled rows as context
+        and make predictions for new tables.
+      </p>
+    </div>
+  </main>
+  <footer>Course materials and interactive demonstrations are coming soon.</footer>
+</body>
+</html>
