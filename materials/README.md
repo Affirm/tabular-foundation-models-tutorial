@@ -1,19 +1,23 @@
 # Teaching materials
 
-This archive contains the interactive tutorial and a self-guided notebook for
+Start with the
+**[interactive tutorial](https://affirm.github.io/tabular-foundation-models-tutorial/)**.
+It runs directly in a modern browser with no installation, GPU, or remote inference service.
+The TabICLv2 checkpoint loads into the browser and inference remains local.
+
+This package also contains a self-guided notebook and the source materials for
 *Table as Prompt: An Interactive Guide to Tabular Foundation Models*.
 
-## Interactive tutorial
+## Optional local copy
 
-Requirements: Python 3 and a modern browser.
+Local serving is only needed to inspect or modify the downloaded website. It requires Python 3:
 
 ```bash
 cd website
 ./serve.sh 8000
 ```
 
-Open <http://localhost:8000/>. The roughly 28 MB TabICLv2 checkpoint loads in
-the browser; inference is local and requires no GPU or remote service.
+Then open <http://localhost:8000/>.
 
 ## Self-guided notebook
 
