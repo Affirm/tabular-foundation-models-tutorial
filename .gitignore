@@ -1,1 +1,20 @@
+# Python environments and caches
+**/.venv/
+**/__pycache__/
+*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.ipynb_checkpoints/
+/materials/notebooks/.openml-cache/
+
+# JavaScript dependencies and build caches
+**/node_modules/
+**/.svelte-kit/
+/materials/tabicl-explainer/build/
+
+# Built by CI from materials/tabicl-explainer
+/materials/website/tabicl-explainer/
+
+# Local operating-system files
 .DS_Store

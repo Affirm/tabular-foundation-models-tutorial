@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>An Interactive Guide to Tabular Foundation Models</title>
+<meta name="description" content="An interactive guide to how foundation models use labeled rows as context and predict targets for new rows." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232ea6d6'/%3E%3Cstop offset='0.5' stop-color='%237c6cf0'/%3E%3Cstop offset='1' stop-color='%23f2724b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' fill='url(%23g)'/%3E%3C/svg%3E" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="An Interactive Guide to Tabular Foundation Models" />
+<meta property="og:description" content="Learn how foundation models use labeled rows as context and predict new tables without task-specific training." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+<link rel="preload" href="model/tabicl.bin" as="fetch" crossorigin />
+<link rel="stylesheet" href="css/main.css" />
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="bg__glow bg__glow--a"></div>
+    <div class="bg__glow bg__glow--b"></div>
+    <div class="bg__glow bg__glow--c"></div>
+    <div class="bg__grid"></div>
+    <div class="bg__grain"></div>
+  </div>
+
+  <header class="bar">
+    <div class="bar__identity">
+      <a class="mark" href="#top">
+        <span class="mark__dot"></span>
+        <span class="mark__name">NeurIPS 2026 · Education Track</span>
+      </a>
+      <a class="github-link mono" href="https://affirm.github.io/tabular-foundation-models-tutorial/" target="_blank" rel="noopener" aria-label="Open the public tutorial website">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2.23c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.39.97.1-.75.4-1.27.74-1.56-2.57-.29-5.27-1.28-5.27-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.47.11-3.05 0 0 .97-.31 3.16 1.18a10.9 10.9 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.58.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.71 5.39-5.29 5.68.42.36.79 1.06.79 2.14v3.18c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z"/>
+        </svg>
+        <span>Website</span>
+      </a>
+    </div>
+    <a class="bar__page-title" href="#top">Tabular Foundation Models</a>
+    <nav class="bar__nav mono" aria-label="Primary">
+      <a href="#theory">guide</a>
+      <a href="#playground">try it</a>
+    </nav>
+  </header>
+
+  <div class="outline-menu" id="outline-menu">
+    <button class="outline-menu__toggle" id="outline-toggle" type="button" aria-expanded="false" aria-controls="outline-nav" aria-label="Open tutorial outline">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <circle cx="4" cy="5" r="1"></circle>
+        <circle cx="4" cy="10" r="1"></circle>
+        <circle cx="4" cy="15" r="1"></circle>
+        <path d="M8 5h8M8 10h8M8 15h8"></path>
+      </svg>
+      <span class="sr-only">Open tutorial outline</span>
+    </button>
+    <nav class="outline-nav" id="outline-nav" aria-label="Tutorial outline">
+      <a href="#problem"><span class="mono">01</span><strong>Problem</strong></a>
+      <a href="#adaptation"><span class="mono">02</span><strong>Adaptation</strong></a>
+      <a href="#theory"><span class="mono">03</span><strong>Theory</strong></a>
+      <a href="#training-architecture"><span class="mono">04</span><strong>Architecture</strong></a>
+      <a href="#live-explainer"><span class="mono">05</span><strong>Live model explorer</strong></a>
+      <a href="#landscape"><span class="mono">06</span><strong>Reference collection</strong></a>
+      <a href="#authors"><span class="mono">07</span><strong>Authors</strong></a>
+    </nav>
+  </div>
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero" id="top">
+    <div class="hero__visual" id="hero-visual">
+      <canvas class="hero__canvas" id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero__drag-zone" id="hero-drag-zone" aria-hidden="true">
+        <span class="hero__drag-label mono">drag to rotate ↔ · double-click to reset</span>
+      </div>
+    </div>
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <h1 class="hero__title">
+          <span>An Interactive Guide to</span>
+          <span>Tabular Foundation Models</span>
+        </h1>
+        <p class="hero__lede">
+          See how pretrained transformers use labeled rows as context and predict targets
+          for new rows in a single forward pass, without task-specific gradient updates.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#prerequisites">Start reading</a>
+          <a class="btn btn--ghost" href="#playground">Skip to the live model</a>
+        </div>
+      </div>
+    </div>
+    <a class="scrollcue mono" href="#prerequisites" aria-label="Scroll down">scroll ↓</a>
+  </section>
+
+  <aside class="prereq-strip" id="prerequisites" aria-labelledby="prereq-title">
+    <div class="wrap prereq-strip__inner">
+      <p class="prereq-strip__label mono" id="prereq-title">Recommended background</p>
+      <ul>
+        <li>supervised learning</li>
+        <li>train and test splits</li>
+        <li>probability</li>
+        <li>attention</li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <!-- ===================== 01 · THE PROBLEM ===================== -->
+    <section class="sec sec--background" id="problem">
+      <div class="wrap">
+        <p class="sec__num mono reveal">01 · The problem</p>
+        <h2 class="sec__title reveal">Why tabular prediction is difficult</h2>
+        <div class="prose reveal">
+          <p>
+            Tabular data underpins applied machine learning in spreadsheets, logs, transactions,
+            and clinical records. Its columns can mix numbers, categories, dates, and missing
+            values, while each dataset can introduce a new schema and prediction task.
+          </p>
+          <p>
+            Gradient-boosted trees such as XGBoost and LightGBM remain strong task-specific
+            baselines. They fit new parameters for each dataset, while tabular foundation models
+            try to reuse a prediction procedure learned during pretraining.
+          </p>
+        </div>
+        <div class="tablelab reveal" id="table-lab">
+          <div class="tablelab__top">
+            <div>
+              <h3>Online shopping sessions under stress</h3>
+              <p class="tablelab__source">
+                Five records from the
+                <a href="https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset" target="_blank" rel="noopener">UCI Online Shoppers dataset ↗</a>.
+                The final session is the query, so its Revenue label is hidden.
+              </p>
+            </div>
+            <button class="tablelab__reset mono" type="button" data-table-action="reset">reset ↺</button>
+          </div>
+
+          <div class="tablelab__actions" aria-label="Table sampling and stress tests">
+            <button type="button" data-table-action="sample-rows">sample rows</button>
+            <button type="button" data-table-action="shuffle-columns">shuffle columns</button>
+            <button type="button" data-table-action="missing">mask values</button>
+            <button type="button" data-table-action="include-purchase">include purchase</button>
+            <button type="button" data-table-action="small">keep only 2 rows</button>
+          </div>
+
+          <div class="tablelab__body">
+            <div class="tablelab__tablewrap">
+              <table class="tablelab__table">
+                <thead id="tablelab-head"></thead>
+                <tbody id="tablelab-body"></tbody>
+              </table>
+              <p class="tablelab__hint mono">last row = query · ? = hidden Revenue target · select a column to inspect it</p>
+            </div>
+
+            <aside class="tablelab__insight" aria-live="polite">
+              <span class="tablelab__type mono" id="tablelab-type">mixed schema</span>
+              <h3 id="tablelab-title">A grid does not imply one data type</h3>
+              <p id="tablelab-copy">
+                Page counts, rates, derived values, visitor categories, and a binary target
+                share one grid, but each carries a different kind of meaning.
+              </p>
+              <div class="tablelab__meter" id="tablelab-meter" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <div class="background-approach reveal">
+          <span class="mono">common approach</span>
+          <div>
+            <h3>Fit a tree ensemble for this table</h3>
+            <p>
+              Gradient boosting builds an additive score function one tree at a time. XGBoost
+              uses first- and second-order derivatives of a regularized objective to choose
+              splits and leaf weights.
+              <a class="cite" href="https://doi.org/10.1214/aos/1013203451" target="_blank" rel="noopener">[1]</a>
+              <a class="cite" href="https://doi.org/10.1145/2939672.2939785" target="_blank" rel="noopener">[2]</a>
+            </p>
+          </div>
+        </div>
+
+        <figure class="gbmoverview reveal">
+          <div class="gbmoverview__row">
+            <span class="gbmoverview__label mono">training</span>
+            <div class="gbmoverview__node">
+              <strong>Labeled table</strong>
+              <small class="mono">5 rows · (xᵢ, yᵢ)</small>
+            </div>
+            <span class="gbmoverview__arrow" aria-hidden="true">→</span>
+            <div class="gbmoverview__node">
+              <strong>Loss derivatives</strong>
+              <small class="mono">gradient gᵢ · Hessian hᵢ</small>
+            </div>
+            <span class="gbmoverview__arrow" aria-hidden="true">→</span>
+            <div class="gbmoverview__node gbmoverview__node--tree">
+              <svg viewBox="0 0 90 58" aria-hidden="true">
+                <path d="M45 10 L22 39 M45 10 L68 39"></path>
+                <circle cx="45" cy="9" r="6"></circle>
+                <circle cx="21" cy="42" r="6"></circle>
+                <circle cx="69" cy="42" r="6"></circle>
+              </svg>
+              <strong>Fit + add one tree</strong>
+              <small class="mono">Fₜ = Fₜ₋₁ + η fₜ</small>
+            </div>
+          </div>
+
+          <div class="gbmoverview__row gbmoverview__row--predict">
+            <span class="gbmoverview__label mono">prediction</span>
+            <div class="gbmoverview__node">
+              <strong>New row</strong>
+              <small class="mono">x</small>
+            </div>
+            <span class="gbmoverview__arrow" aria-hidden="true">→</span>
+            <div class="gbmoverview__node">
+              <strong>Sum fitted-tree scores</strong>
+              <small class="mono">F(x) = F₀ + Σ η fₜ(x)</small>
+            </div>
+            <span class="gbmoverview__arrow" aria-hidden="true">→</span>
+            <div class="gbmoverview__node gbmoverview__node--output">
+              <strong>Transform score</strong>
+              <small>sigmoid · softmax · identity</small>
+            </div>
+          </div>
+
+        </figure>
+
+        <div class="boostrefs reveal" aria-label="Gradient boosting references">
+          <span class="mono">primary sources</span>
+          <ol>
+            <li><a href="https://doi.org/10.1214/aos/1013203451" target="_blank" rel="noopener">Friedman, Gradient Boosting Machine (2001)</a></li>
+            <li><a href="https://doi.org/10.1145/2939672.2939785" target="_blank" rel="noopener">Chen and Guestrin, XGBoost (KDD 2016)</a></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 · ADAPTATION ===================== -->
+    <section class="sec" id="adaptation">
+      <div class="wrap">
+        <p class="sec__num mono reveal">02 · Adaptation</p>
+        <h2 class="sec__title reveal">Fit a model or provide context</h2>
+        <div class="prose reveal">
+          <p>
+            A tree ensemble learns a new set of trees from each labeled table. Later predictions
+            need the fitted ensemble and the new feature rows.
+          </p>
+          <p>
+            In-context TFMs such as TabPFN and TabICL keep their pretrained network weights fixed.
+            They process labeled context rows and query rows together during prediction.
+            <a class="cite" href="https://tabularfoundationmodels.com/prediction" target="_blank" rel="noopener">[TFM book]</a>
+            <a class="cite" href="https://github.com/PriorLabs/tabpfn" target="_blank" rel="noopener">[TabPFN]</a>
+          </p>
+          <p class="adaptation__thesis">
+            The difference is where task adaptation happens: fitted parameters or inference context.
+          </p>
+        </div>
+
+        <figure class="adaptmap reveal">
+          <div class="adaptmap__source">
+            <div class="adaptmap__source-title">
+              <strong>Five training rows and one row to predict</strong>
+            </div>
+            <div class="adaptmap__dataset" aria-label="Five labeled training rows and one query row">
+              <div>
+                <span class="mono">training data</span>
+                <strong>5 labeled rows</strong>
+                <div class="adaptmap__mini-table" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i><i class="is-target"></i>
+                  <i></i><i></i><i></i><i></i><i class="is-target"></i>
+                  <i></i><i></i><i></i><i></i><i class="is-target"></i>
+                  <i></i><i></i><i></i><i></i><i class="is-target"></i>
+                  <i></i><i></i><i></i><i></i><i class="is-target"></i>
+                </div>
+              </div>
+              <span class="adaptmap__plus" aria-hidden="true">+</span>
+              <div>
+                <span class="mono">prediction input</span>
+                <strong>1 query row</strong>
+                <div class="adaptmap__mini-table adaptmap__mini-table--query" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i><i class="is-query">?</i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <svg class="adaptmap__branches" viewBox="0 0 1000 80" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M500 0 V24 C500 54 250 42 250 80"></path>
+            <path d="M500 0 V24 C500 54 750 42 750 80"></path>
+          </svg>
+
+          <div class="adaptmap__paths">
+            <article class="adaptpath">
+              <header>
+                <span class="adaptpath__index mono">A</span>
+                <div><span class="mono">gradient-boosted trees</span><h3>Fit a model for the table</h3></div>
+              </header>
+              <svg class="adaptchart" viewBox="0 0 560 330" role="img" aria-labelledby="gbdt-chart-title gbdt-chart-desc">
+                <title id="gbdt-chart-title">Gradient-boosted tree adaptation</title>
+                <desc id="gbdt-chart-desc">Five labeled rows first fit a tree ensemble. A copy of that fitted ensemble is then used to predict one new row without fitting again.</desc>
+                <defs>
+                  <marker id="gbdt-arrowhead" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8Z"></path></marker>
+                  <marker id="gbdt-copy-arrowhead" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8Z"></path></marker>
+                </defs>
+                <text class="adaptchart__lane-label" x="24" y="28">TRAIN · 5 LABELED ROWS</text>
+                <g class="adaptchart__table" transform="translate(32 48)">
+                  <rect width="120" height="100" rx="5"></rect>
+                  <path class="is-value is-value--mid" d="M24 0H48V20H24Z M0 20H24V40H0Z M72 20H96V40H72Z M48 40H72V60H48Z M24 60H48V80H24Z M0 80H24V100H0Z"></path>
+                  <path class="is-value is-value--dark" d="M72 0H96V20H72Z M24 20H48V40H24Z M0 40H24V60H0Z M72 60H96V80H72Z M48 80H72V100H48Z"></path>
+                  <path d="M0 20H120 M0 40H120 M0 60H120 M0 80H120 M24 0V100 M48 0V100 M72 0V100 M96 0V100"></path>
+                  <rect class="is-label" x="96" width="24" height="100"></rect>
+                </g>
+                <text class="adaptchart__caption" x="92" y="164">training data</text>
+                <path class="adaptchart__arrow" marker-end="url(#gbdt-arrowhead)" d="M164 98 H220"></path>
+                <text class="adaptchart__verb" x="191" y="83">fit</text>
+
+                <g class="adaptchart__modelbox">
+                  <rect x="230" y="38" width="190" height="124" rx="9"></rect>
+                  <text class="adaptchart__model-title" x="325" y="62">FITTED TREE ENSEMBLE</text>
+                  <g class="adaptchart__forest" transform="translate(246 70)">
+                    <g transform="translate(0 0)"><path d="M36 15L16 47M36 15L56 47"></path><circle cx="36" cy="12" r="7"></circle><circle cx="14" cy="51" r="7"></circle><circle cx="58" cy="51" r="7"></circle></g>
+                    <g transform="translate(52 20)"><path d="M36 15L16 47M36 15L56 47"></path><circle cx="36" cy="12" r="7"></circle><circle cx="14" cy="51" r="7"></circle><circle cx="58" cy="51" r="7"></circle></g>
+                    <g transform="translate(104 2)"><path d="M36 15L16 47M36 15L56 47"></path><circle cx="36" cy="12" r="7"></circle><circle cx="14" cy="51" r="7"></circle><circle cx="58" cy="51" r="7"></circle></g>
+                  </g>
+                </g>
+
+                <path class="adaptchart__copy-arrow" marker-end="url(#gbdt-copy-arrowhead)" d="M325 168 V211"></path>
+                <text class="adaptchart__copy-label" x="397" y="191">copy fitted model</text>
+                <path class="adaptchart__separator" d="M20 190 H307 M455 190 H540"></path>
+                <text class="adaptchart__lane-label" x="24" y="216">PREDICT · 1 NEW ROW</text>
+                <g class="adaptchart__table adaptchart__table--query" transform="translate(32 232)">
+                  <rect width="120" height="24" rx="4"></rect>
+                  <path class="is-value is-value--mid" d="M24 0H48V24H24Z M72 0H96V24H72Z"></path>
+                  <path class="is-value is-value--dark" d="M48 0H72V24H48Z"></path>
+                  <path d="M24 0V24 M48 0V24 M72 0V24 M96 0V24"></path>
+                  <rect class="is-query" x="96" width="24" height="24"></rect>
+                  <text class="adaptchart__question" x="108" y="17">?</text>
+                </g>
+                <text class="adaptchart__caption" x="92" y="277">query row appears here</text>
+                <path class="adaptchart__arrow" marker-end="url(#gbdt-arrowhead)" d="M164 244 H220"></path>
+                <g class="adaptchart__modelbox adaptchart__modelbox--copy">
+                  <rect x="230" y="218" width="190" height="66" rx="9"></rect>
+                  <text class="adaptchart__model-title" x="325" y="238">SAME FITTED ENSEMBLE</text>
+                  <g class="adaptchart__forest" transform="translate(288 244) scale(.45)">
+                    <g transform="translate(0 0)"><path d="M36 15L16 47M36 15L56 47"></path><circle cx="36" cy="12" r="7"></circle><circle cx="14" cy="51" r="7"></circle><circle cx="58" cy="51" r="7"></circle></g>
+                    <g transform="translate(52 0)"><path d="M36 15L16 47M36 15L56 47"></path><circle cx="36" cy="12" r="7"></circle><circle cx="14" cy="51" r="7"></circle><circle cx="58" cy="51" r="7"></circle></g>
+                    <g transform="translate(104 0)"><path d="M36 15L16 47M36 15L56 47"></path><circle cx="36" cy="12" r="7"></circle><circle cx="14" cy="51" r="7"></circle><circle cx="58" cy="51" r="7"></circle></g>
+                  </g>
+                </g>
+                <path class="adaptchart__arrow" marker-end="url(#gbdt-arrowhead)" d="M432 244 H474"></path>
+                <g class="adaptchart__output" transform="translate(488 207)">
+                  <rect x="0" y="34" width="14" height="42"></rect>
+                  <rect x="22" y="12" width="14" height="64"></rect>
+                  <rect x="44" y="0" width="14" height="76"></rect>
+                </g>
+                <text class="adaptchart__caption" x="517" y="298">prediction</text>
+              </svg>
+              <footer><span aria-hidden="true">●</span> first fit on 5 rows; then apply the fitted model to 1 row</footer>
+            </article>
+
+            <article class="adaptpath adaptpath--tfm">
+              <header>
+                <span class="adaptpath__index mono">B</span>
+                <div><span class="mono">pretrained TFM</span><h3>Provide examples as context</h3></div>
+              </header>
+              <svg class="adaptchart" viewBox="0 0 560 330" role="img" aria-labelledby="tfm-chart-title tfm-chart-desc">
+                <title id="tfm-chart-title">Tabular foundation model adaptation</title>
+                <desc id="tfm-chart-desc">Five labeled context rows and one query row enter a fixed pretrained model together. Only the query row receives a prediction.</desc>
+                <defs><marker id="tfm-arrowhead" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8Z"></path></marker></defs>
+                <text class="adaptchart__lane-label" x="24" y="28">PREDICT · ALL 6 ROWS ENTER TOGETHER</text>
+                <g class="adaptchart__table" transform="translate(28 54)">
+                  <rect width="120" height="120" rx="5"></rect>
+                  <path class="is-value is-value--mid" d="M24 0H48V20H24Z M0 20H24V40H0Z M72 20H96V40H72Z M48 40H72V60H48Z M24 60H48V80H24Z M0 80H24V100H0Z M24 100H48V120H24Z M72 100H96V120H72Z"></path>
+                  <path class="is-value is-value--dark" d="M72 0H96V20H72Z M24 20H48V40H24Z M0 40H24V60H0Z M72 60H96V80H72Z M48 80H72V100H48Z M48 100H72V120H48Z"></path>
+                  <path d="M0 20H120 M0 40H120 M0 60H120 M0 80H120 M0 100H120 M24 0V120 M48 0V120 M72 0V120 M96 0V120"></path>
+                  <rect class="is-label" x="96" width="24" height="100"></rect>
+                  <rect class="is-query" x="96" y="100" width="24" height="20"></rect>
+                  <text class="adaptchart__question" x="108" y="115">?</text>
+                </g>
+                <path class="adaptchart__context-bracket" d="M10 55H20V154H10"></path>
+                <text class="adaptchart__side-label" transform="translate(9 105) rotate(-90)">5 LABELED CONTEXT ROWS</text>
+                <path class="adaptchart__query-bracket" d="M10 155H20V174H10"></path>
+                <text class="adaptchart__caption" x="88" y="198">1 query row is part of the table</text>
+
+                <path class="adaptchart__arrow" marker-end="url(#tfm-arrowhead)" d="M160 114 H216"></path>
+                <text class="adaptchart__verb" x="187" y="98">one pass</text>
+                <g class="adaptchart__model" transform="translate(228 48)">
+                  <rect width="188" height="142" rx="9"></rect>
+                  <text class="adaptchart__model-title" x="94" y="22">PRETRAINED θ* · FIXED</text>
+                  <rect x="17" y="35" width="154" height="25" rx="4"></rect>
+                  <rect x="17" y="70" width="154" height="25" rx="4"></rect>
+                  <rect x="17" y="105" width="154" height="25" rx="4"></rect>
+                  <path d="M40 47 C72 76 118 20 148 47 M40 82 C76 111 112 54 148 82 M40 117 C76 89 112 143 148 117"></path>
+                </g>
+                <text class="adaptchart__caption" x="322" y="213">context and query interact inside</text>
+                <path class="adaptchart__arrow" marker-end="url(#tfm-arrowhead)" d="M428 114 H474"></path>
+                <g class="adaptchart__output" transform="translate(488 77)">
+                  <rect x="0" y="54" width="14" height="42"></rect>
+                  <rect x="22" y="26" width="14" height="70"></rect>
+                  <rect x="44" y="5" width="14" height="91"></rect>
+                </g>
+                <text class="adaptchart__caption" x="517" y="198">query prediction</text>
+                <g class="adaptchart__callout">
+                  <rect x="115" y="244" width="330" height="46" rx="23"></rect>
+                  <text x="280" y="272">5 context rows + 1 query row → prediction</text>
+                </g>
+              </svg>
+              <footer><span aria-hidden="true">◆</span> no new model is fitted; the 5 rows remain as context</footer>
+            </article>
+          </div>
+
+        </figure>
+
+        <a class="section-prompt reveal" href="#theory">
+          <span>If the model is not trained on this table, where did its predictive behavior come from?</span>
+          <span aria-hidden="true">Continue to theory ↓</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================== 03 · THEORY ===================== -->
+    <section class="sec" id="theory">
+      <div class="wrap">
+        <p class="sec__num mono reveal">03 · Theory</p>
+        <h2 class="sec__title reveal">Prior-Data Fitted Network (PFN)</h2>
+        <div class="prose reveal">
+          <p>
+            A prior-data fitted network, or PFN, learns a prediction rule across sampled
+            supervised tasks. Each episode reveals context labels, hides query labels, and uses
+            query loss to improve one shared predictor.
+          </p>
+          <p>
+            In the PFN formulation, minimizing expected query loss makes the network approximate
+            the posterior-predictive distribution induced by the sampled task prior.
+            <a class="cite" href="https://arxiv.org/abs/2112.10510" target="_blank" rel="noopener">[PFN]</a>
+          </p>
+        </div>
+
+        <figure class="pfn-overview reveal" id="pfn-overview">
+          <header class="pfn-overview__header">
+            <span class="mono">the 30-second picture</span>
+            <h3>PFN learns <em>how to learn from a table</em></h3>
+            <p>
+              Instead of fitting a new model to one dataset, pretraining repeats the same four-step
+              lesson across many temporary datasets.
+            </p>
+          </header>
+
+          <ol class="pfn-overview__flow" aria-label="PFN pretraining in four steps">
+            <li>
+              <span class="mono">01</span>
+              <i class="pfn-flow-icon pfn-flow-icon--tasks" aria-hidden="true"><b></b><b></b><b></b></i>
+              <div><strong>Sample a task</strong><small>A fresh table comes from the prior.</small></div>
+            </li>
+            <li>
+              <span class="mono">02</span>
+              <i class="pfn-flow-icon pfn-flow-icon--split" aria-hidden="true"><b></b><b></b><b></b><b></b></i>
+              <div><strong>Make an episode</strong><small>Show context labels; hide the query label.</small></div>
+            </li>
+            <li>
+              <span class="mono">03</span>
+              <i class="pfn-flow-icon pfn-flow-icon--predict" aria-hidden="true"><b></b><b></b></i>
+              <div><strong>Predict the query</strong><small>One shared network reads the examples.</small></div>
+            </li>
+            <li>
+              <span class="mono">04</span>
+              <i class="pfn-flow-icon pfn-flow-icon--update" aria-hidden="true">θ′</i>
+              <div><strong>Learn from the error</strong><small>Update θ, discard the temporary table.</small></div>
+            </li>
+          </ol>
+
+          <div class="pfn-overview__memory">
+            <span aria-hidden="true">↻</span>
+            <p><strong>Repeat across tasks.</strong> The datasets disappear; the prediction strategy remains in <i>θ</i>.</p>
+            <p><strong>At inference:</strong> freeze <i>θ</i> and use a new table only as context.</p>
+          </div>
+
+          <section class="pfn-walkthrough" aria-labelledby="pfn-walkthrough-title">
+            <header>
+              <span class="mono">now, one step at a time</span>
+              <h3 id="pfn-walkthrough-title">Follow one purchase-prediction episode</h3>
+              <p>The same illustrative shopping task runs through every step below.</p>
+            </header>
+
+            <article class="pfn-step">
+              <header class="pfn-step__header">
+                <span class="pfn-step__number mono">01</span>
+                <div>
+                  <span class="mono">sample</span>
+                  <h4>Start with a fresh supervised task</h4>
+                  <p>The prior defines what kinds of tables and relationships the PFN practices on.</p>
+                </div>
+              </header>
+              <div class="pfn-step__body">
+                <div class="pfn-step__concept">
+                  <span class="pfn-card-label mono">formula</span>
+                  <math display="block" aria-label="Dataset D is sampled from the task prior p of D">
+                    <mi>D</mi><mo>∼</mo><mi>p</mi><mo>(</mo><mi>D</mi><mo>)</mo>
+                  </math>
+                  <dl class="pfn-symbols">
+                    <div><dt><i>D</i></dt><dd>one temporary labeled table</dd></div>
+                    <div><dt><i>p(D)</i></dt><dd>the task-generating prior</dd></div>
+                  </dl>
+                </div>
+                <div class="pfn-step__mini">
+                  <span class="pfn-card-label mono">mini visual · choose another episode</span>
+                  <div class="pfn-taskbank__tasks" role="group" aria-label="Select an illustrative sampled task">
+                    <button class="is-active" type="button" data-pfn-overview-task="0" aria-pressed="true">
+                      <b>D¹</b><span aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                    </button>
+                    <button type="button" data-pfn-overview-task="1" aria-pressed="false">
+                      <b>D²</b><span aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                    </button>
+                    <button type="button" data-pfn-overview-task="2" aria-pressed="false">
+                      <b>D³</b><span aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                    </button>
+                  </div>
+                  <p>Each click changes the episode below; the shared parameters <i>θ</i> stay the same.</p>
+                </div>
+                <aside class="pfn-step__example">
+                  <span class="pfn-card-label mono">concrete example</span>
+                  <strong>Predict whether an online session ends in a purchase.</strong>
+                  <p>Columns include product pages, bounce rate, visitor type, and weekend; the target is Revenue.</p>
+                </aside>
+                <aside class="pfn-step__intuition">
+                  <span aria-hidden="true">💡</span>
+                  <p><strong>Picture a quiz generator.</strong> It creates a new practice sheet every round so the student learns a method, not one answer key.</p>
+                </aside>
+              </div>
+            </article>
+
+            <article class="pfn-step">
+              <header class="pfn-step__header">
+                <span class="pfn-step__number mono">02</span>
+                <div>
+                  <span class="mono">split</span>
+                  <h4>Turn the task into context and a query</h4>
+                  <p>The network sees worked examples and one question whose answer is hidden.</p>
+                </div>
+              </header>
+              <div class="pfn-step__body">
+                <div class="pfn-step__concept">
+                  <span class="pfn-card-label mono">formula</span>
+                  <math display="block" aria-label="Dataset D is split into context D c and query D q">
+                    <mi>D</mi><mo>=</mo><msub><mi>D</mi><mi>c</mi></msub><mo>∪</mo><msub><mi>D</mi><mi>q</mi></msub>
+                  </math>
+                  <code>D<sub>c</sub> = {(x<sub>i</sub>, y<sub>i</sub>)} &nbsp;·&nbsp; D<sub>q</sub> = {(x<sub>q</sub>, <b>?</b>)}</code>
+                </div>
+                <div class="pfn-step__mini pfn-episode">
+                  <span class="pfn-card-label mono">mini visual · selected episode <b id="pfn-overview-task-label">D¹</b></span>
+                  <div class="pfn-episode__rows" aria-label="Five context rows and one query row">
+                    <span><b>C1</b><i></i><i></i><i></i><i></i><em>0</em></span>
+                    <span><b>C2</b><i></i><i></i><i></i><i></i><em>1</em></span>
+                    <span><b>C3</b><i></i><i></i><i></i><i></i><em>0</em></span>
+                    <span><b>C4</b><i></i><i></i><i></i><i></i><em>1</em></span>
+                    <span><b>C5</b><i></i><i></i><i></i><i></i><em>1</em></span>
+                    <span class="is-query"><b>Q</b><i></i><i></i><i></i><i></i><em>?</em></span>
+                  </div>
+                  <div class="pfn-episode__legend"><span>features</span><span>visible Revenue</span><span>hidden Revenue</span></div>
+                </div>
+                <aside class="pfn-step__example">
+                  <span class="pfn-card-label mono">concrete example</span>
+                  <strong>Five sessions keep their 0/1 outcomes.</strong>
+                  <p>The query keeps <code>42 product pages · 0.01 bounce rate · weekend</code>, but Revenue becomes <code>?</code>.</p>
+                </aside>
+                <aside class="pfn-step__intuition">
+                  <span aria-hidden="true">💡</span>
+                  <p><strong>Context rows are worked examples.</strong> The query row is the exam question placed on the same page.</p>
+                </aside>
+              </div>
+            </article>
+
+            <article class="pfn-step">
+              <header class="pfn-step__header">
+                <span class="pfn-step__number mono">03</span>
+                <div>
+                  <span class="mono">predict</span>
+                  <h4>Use the context to predict the hidden answer</h4>
+                  <p>The same network parameters serve every task; the context changes what prediction they produce.</p>
+                </div>
+              </header>
+              <div class="pfn-step__body">
+                <div class="pfn-step__concept pfn-predictor">
+                  <span class="pfn-card-label mono">formula</span>
+                  <math display="block" aria-label="q theta predicts query label y q conditioned on query features x q and context D c">
+                    <msub><mi>q</mi><mi>θ</mi></msub><mo>(</mo><msub><mi>y</mi><mi>q</mi></msub><mo>|</mo><msub><mi>x</mi><mi>q</mi></msub><mo>,</mo><msub><mi>D</mi><mi>c</mi></msub><mo>)</mo>
+                  </math>
+                  <small>fixed θ + changing context → task-specific prediction</small>
+                </div>
+                <div class="pfn-step__mini pfn-output">
+                  <span class="pfn-card-label mono">mini visual · predicted probabilities</span>
+                  <strong>Revenue for the query session</strong>
+                  <div><span>0</span><i id="pfn-overview-p0"></i><output id="pfn-overview-p0-label">37%</output></div>
+                  <div><span>1</span><i id="pfn-overview-p1"></i><output id="pfn-overview-p1-label">63%</output></div>
+                </div>
+                <aside class="pfn-step__example">
+                  <span class="pfn-card-label mono">concrete example</span>
+                  <strong>The model assigns 63% to purchase.</strong>
+                  <p>The visible sessions are not used to fit new weights. They are inputs to this forward pass.</p>
+                </aside>
+                <aside class="pfn-step__intuition">
+                  <span aria-hidden="true">💡</span>
+                  <p><strong>The network reads the room.</strong> Its long-term skill is in <i>θ</i>; the current table tells it which problem it is solving now.</p>
+                </aside>
+              </div>
+            </article>
+
+            <article class="pfn-step">
+              <header class="pfn-step__header">
+                <span class="pfn-step__number mono">04</span>
+                <div>
+                  <span class="mono">learn</span>
+                  <h4>Reveal the answer and update the shared predictor</h4>
+                  <p>This happens during PFN pretraining, then repeats with another temporary task.</p>
+                </div>
+              </header>
+              <div class="pfn-step__body">
+                <div class="pfn-step__concept pfn-update">
+                  <span class="pfn-card-label mono">formula</span>
+                  <code id="pfn-overview-loss">y<sub>q</sub> = 1; NLL = −log q<sub>θ</sub>(y<sub>q</sub> = 1 | x<sub>q</sub>, D<sub>c</sub>) = −log 0.63 = 0.46</code>
+                  <math display="block" aria-label="Theta is updated by gradient descent on the query loss">
+                    <mi>θ</mi><mo>←</mo><mi>θ</mi><mo>−</mo><mi>η</mi><msub><mo>∇</mo><mi>θ</mi></msub><mi>ℒ</mi>
+                  </math>
+                </div>
+                <div class="pfn-step__mini pfn-update-loop" aria-label="Reveal, update, discard, and repeat">
+                  <span class="pfn-card-label mono">mini visual · what survives?</span>
+                  <div><span>reveal <b>1</b></span><i>→</i><span>update <b>θ</b></span><i>→</i><span>discard <s>D¹</s></span></div>
+                  <strong>θ′ continues to the next task</strong>
+                </div>
+                <aside class="pfn-step__example">
+                  <span class="pfn-card-label mono">concrete example</span>
+                  <strong>The true outcome is purchase, so the loss is 0.46.</strong>
+                  <p>Backpropagation slightly changes <i>θ</i> so future episodes can be predicted better.</p>
+                </aside>
+                <aside class="pfn-step__intuition">
+                  <span aria-hidden="true">💡</span>
+                  <p><strong>Erase the worksheet; keep the lesson.</strong> The temporary rows vanish, but their training signal remains in the shared weights.</p>
+                </aside>
+              </div>
+            </article>
+          </section>
+
+          <section class="scm-lab" id="scm-lab" aria-labelledby="scm-lab-title">
+            <header class="scm-lab__header">
+              <div>
+                <span class="mono">interactive · synthetic task generator</span>
+                <h3 id="scm-lab-title">Watch a synthetic table come into existence</h3>
+                <p>
+                  First sample one data-generating mechanism. Then reuse that same mechanism with
+                  fresh random noise to create many related rows.
+                </p>
+              </div>
+              <div class="scm-lab__actions">
+                <button id="scm-btn" type="button">Sample a new SCM</button>
+                <button id="scm-row-btn" type="button">Generate one row</button>
+                <button id="scm-task-btn" type="button">Generate 20-row task</button>
+              </div>
+            </header>
+
+            <div class="scm-lab__thesis">
+              <strong>Synthetic does not mean filling every cell with unrelated random numbers.</strong>
+              <span>One sampled SCM creates a coherent relationship; only the noise changes from row to row.</span>
+            </div>
+
+            <div class="scm-lab__stages">
+              <section class="scm-mechanism" aria-labelledby="scm-mechanism-title">
+                <header>
+                  <span class="scm-stage-number mono">01</span>
+                  <div>
+                    <span class="mono">sample once per task</span>
+                    <h4 id="scm-mechanism-title">Choose a causal graph and its functions</h4>
+                  </div>
+                </header>
+                <canvas id="scm-viz" width="640" height="320" aria-label="Sampled structural causal model from noise through a hidden variable to two observed features and one label"></canvas>
+                <details class="scm-equations-details">
+                  <summary>See the sampled equations</summary>
+                  <div class="scm-equations">
+                    <code id="scm-eq-z">z = f(ε₁, ε₂)</code>
+                    <code id="scm-eq-x1">x₁ = g₁(z, εₓ₁)</code>
+                    <code id="scm-eq-x2">x₂ = g₂(z, ε₂, εₓ₂)</code>
+                    <code id="scm-eq-y">y = 1[h(z, x₂, εᵧ) &gt; 0]</code>
+                  </div>
+                </details>
+              </section>
+
+              <section class="scm-sampler" aria-labelledby="scm-sampler-title">
+                <header>
+                  <span class="scm-stage-number mono">02</span>
+                  <div>
+                    <span class="mono">sample again for every row</span>
+                    <h4 id="scm-sampler-title">Draw noise, then run the equations forward</h4>
+                  </div>
+                </header>
+
+                <div class="scm-trace" id="scm-trace" aria-live="polite">
+                  <div class="scm-trace__group">
+                    <span class="mono">fresh noise</span>
+                    <div><b>ε₁</b><output id="scm-value-e1">–</output></div>
+                    <div><b>ε₂</b><output id="scm-value-e2">–</output></div>
+                    <div><b>εᵧ</b><output id="scm-value-ey">–</output></div>
+                  </div>
+                  <i aria-hidden="true">→</i>
+                  <div class="scm-trace__group scm-trace__group--hidden">
+                    <span class="mono">hidden cause</span>
+                    <div><b>z</b><output id="scm-value-z">–</output></div>
+                  </div>
+                  <i aria-hidden="true">→</i>
+                  <div class="scm-trace__group scm-trace__group--observed">
+                    <span class="mono">saved row</span>
+                    <div><b>X₁</b><output id="scm-value-x1">–</output></div>
+                    <div><b>X₂</b><output id="scm-value-x2">–</output></div>
+                    <div><b>y</b><output id="scm-value-y">–</output></div>
+                  </div>
+                </div>
+
+                <label class="scm-noise" for="scm-noise">
+                  <span><b>Noise strength for future rows</b><output id="scm-noise-value">0.35</output></span>
+                  <input id="scm-noise" type="range" min="0" max="1" step="0.05" value="0.35" />
+                  <small>Low noise makes the relationship clearer; high noise makes rows less predictable.</small>
+                </label>
+              </section>
+            </div>
+
+            <section class="scm-dataset" aria-labelledby="scm-dataset-title">
+              <header>
+                <div>
+                  <span class="scm-stage-number mono">03</span>
+                  <div>
+                    <span class="mono">the resulting synthetic task</span>
+                    <h4 id="scm-dataset-title">The generator creates X and y; the episode masks query y later</h4>
+                  </div>
+                </div>
+                <p id="scm-summary">No rows yet. Generate one row to see its complete causal trace.</p>
+              </header>
+              <div class="scm-dataset__tablewrap">
+                <table class="scm-dataset__table">
+                  <thead><tr><th>row</th><th>X₁</th><th>X₂</th><th>y</th></tr></thead>
+                  <tbody id="scm-table"></tbody>
+                </table>
+                <div class="scm-dataset__empty" id="scm-empty">The sampled mechanism is ready. No observations have been drawn yet.</div>
+              </div>
+              <footer>
+                <span><b>Generator output:</b> complete rows (X, y)</span>
+                <span><b>PFN input:</b> context y visible · query y masked</span>
+                <strong>masked query y still supplies the training loss</strong>
+              </footer>
+            </section>
+          </section>
+
+          <section class="pfn-objective" aria-labelledby="pfn-math-title">
+            <div>
+              <span class="mono">put all four steps together</span>
+              <h4 id="pfn-math-title">Minimize expected query loss across the task prior</h4>
+              <p>With enough capacity and representative tasks, this trains <i>q<sub>θ</sub></i> to approximate the prior's posterior-predictive distribution.</p>
+            </div>
+            <math display="block" aria-label="Theta star minimizes expected negative log predictive probability over queries and datasets from p of D">
+              <msup><mi>θ</mi><mo>*</mo></msup><mo>=</mo>
+              <munder><mo>arg min</mo><mi>θ</mi></munder>
+              <msub><mi>E</mi><mrow><mi>D</mi><mo>∼</mo><mi>p</mi><mo>(</mo><mi>D</mi><mo>)</mo></mrow></msub>
+              <mrow><mo>[</mo><mo>−</mo><mi mathvariant="normal">log</mi>
+                <msub><mi>q</mi><mi>θ</mi></msub><mo>(</mo><msub><mi>y</mi><mi>q</mi></msub><mo>|</mo>
+                <msub><mi>x</mi><mi>q</mi></msub><mo>,</mo><msub><mi>D</mi><mi>c</mi></msub><mo>)</mo><mo>]</mo>
+              </mrow>
+            </math>
+            <p class="pfn-objective__caveat"><strong>Important boundary:</strong> the approximation is relative to the chosen task prior, not a universal Bayesian predictor for every possible table.</p>
+          </section>
+        </figure>
+
+        <a class="section-prompt reveal" href="#training-architecture">
+          <span>Now connect the PFN idea to one concrete model architecture.</span>
+          <span aria-hidden="true">Continue to architecture ↓</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================== 04 · ARCHITECTURE ===================== -->
+    <section class="sec" id="training-architecture">
+      <div class="wrap">
+        <p class="sec__num mono reveal">04 · Architecture</p>
+        <h2 class="sec__title reveal"><span>Try it.</span><span>Train it.</span><span>Run inference.</span></h2>
+        <div class="prose reveal">
+          <p>
+            PFN describes a training formulation, not one required architecture. This tutorial
+            makes it concrete with
+            <a href="https://github.com/soda-inria/nanotabicl" target="_blank" rel="noopener">nanoTabICL</a>,
+            a compact implementation of the
+            <a href="https://arxiv.org/abs/2602.11139" target="_blank" rel="noopener">TabICLv2</a>
+            graph. TabICLv2 applies the PFN objective to synthetic tasks; nanoTabICL exposes its
+            core inference graph in a compact educational implementation.
+            <a class="cite" href="https://arxiv.org/abs/2112.10510" target="_blank" rel="noopener">[PFN]</a>
+            <a class="cite" href="https://arxiv.org/abs/2602.11139" target="_blank" rel="noopener">[TabICLv2]</a>
+            <a class="cite" href="https://github.com/soda-inria/nanotabicl" target="_blank" rel="noopener">[nanoTabICL]</a>
+          </p>
+        </div>
+
+        <nav class="architecture-parts reveal" aria-label="Architecture section parts">
+          <a href="#playground"><span class="mono">part 1</span><strong>Try it out</strong><small>Compare four decision fields</small></a>
+          <a href="#training-live"><span class="mono">part 2</span><strong>Training</strong><small>Learn shared weights across tasks</small></a>
+          <a href="#inference-architecture"><span class="mono">part 3</span><strong>Inference</strong><small>Run the same graph with frozen weights</small></a>
+        </nav>
+
+        <div class="training-play-intro reveal" id="playground">
+          <span class="mono">part 1 · try it out</span>
+          <h3>Compare four predictors on the same task</h3>
+          <p>
+            All four answer the same question: given labeled rows and one query, what class
+            should the query get? Logistic regression and the tree fit task-specific parameters;
+            the frozen TFM instead adapts through inference context without updating its weights.
+          </p>
+          <div class="playground-compare" aria-label="How kNN and a frozen TFM differ">
+            <article>
+              <span class="mono">kNN</span>
+              <p>Nearby labeled rows vote. Spatial distance decides which rows count as evidence.</p>
+            </article>
+            <article>
+              <span class="mono">Frozen TFM</span>
+              <p>The same context passes through fixed weights. Learned attention decides how each row is read.</p>
+            </article>
+          </div>
+          <p class="playground-compare__note">
+            Compare them side by side below: the labeled points and query stay fixed while each
+            model produces its own decision field.
+          </p>
+        </div>
+
+        <section class="nano-try reveal" aria-labelledby="playground-title">
+          <header>
+            <span class="mono">four-model comparison</span>
+            <h3 id="playground-title">Same data and query across four predictors</h3>
+            <p>Linear, tree, kNN, and TFM use one shared dataset and query. Drag any ★ to update the complete 2×2 comparison.</p>
+          </header>
+
+          <div class="playground">
+            <div class="playground__stage">
+              <div class="playground__modebar">
+                <div>
+                  <span class="playground__modebadge mono" id="pg-view-step">side-by-side 2D</span>
+                  <p id="pg-view-copy">All four canvases use the same 2D context and query.</p>
+                </div>
+                <button class="view-toggle__reset mono" id="pg-reset-view" type="button" hidden>reset view ↺</button>
+              </div>
+              <div class="playground__canvas-pair">
+                <article class="model-canvas-card">
+                  <header><span class="mono">Linear</span><strong>Logistic boundary</strong></header>
+                  <div class="playground__canvaswrap">
+                    <canvas class="is-flat" id="pg-linear-canvas" width="360" height="360" aria-label="Interactive logistic-regression prediction slice using the shared context and query"></canvas>
+                  </div>
+                  <div class="readout mono" id="pg-linear-readout" aria-live="polite"></div>
+                </article>
+
+                <article class="model-canvas-card">
+                  <header><span class="mono">Tree</span><strong>Depth-3 decision tree</strong></header>
+                  <div class="playground__canvaswrap">
+                    <canvas class="is-flat" id="pg-tree-canvas" width="360" height="360" aria-label="Interactive decision-tree prediction slice using the shared context and query"></canvas>
+                  </div>
+                  <div class="readout mono" id="pg-tree-readout" aria-live="polite"></div>
+                </article>
+
+                <article class="model-canvas-card">
+                  <header><span class="mono">kNN</span><strong>Nearest-neighbor field</strong></header>
+                  <div class="playground__canvaswrap">
+                    <canvas class="is-flat" id="pg-knn-canvas" width="360" height="360" aria-label="Interactive k-nearest-neighbor prediction slice using the shared context and query"></canvas>
+                  </div>
+                  <div class="readout mono" id="pg-knn-readout" aria-live="polite"></div>
+                </article>
+
+                <article class="model-canvas-card model-canvas-card--tfm">
+                  <header><span class="mono">Tabular Foundation Model</span><strong>TFM field</strong></header>
+                  <div class="playground__canvaswrap">
+                    <canvas class="is-flat" id="pg-canvas" width="360" height="360" tabindex="0" aria-label="Interactive 2D TFM prediction field using the shared context and query" aria-describedby="pg-hint"></canvas>
+                    <div class="tfm-load-overlay" id="pg-load-overlay">
+                      <strong>Loading Tabular Foundation Model</strong>
+                      <div class="playground-controls__progress-label">
+                        <span>28 MB checkpoint</span>
+                        <output class="mono" id="pg-bar-label">0%</output>
+                      </div>
+                      <div class="bar-wrap" id="pg-bar-wrap" role="progressbar" aria-label="TabICL model loading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar-fill" id="pg-bar"></div></div>
+                      <span class="dock__status mono" id="pg-status">Starting automatically…</span>
+                      <small class="model-load-hint">First load may take several seconds. After downloading, the browser prepares 8 views.</small>
+                    </div>
+                    <div class="playground__attention-key mono" id="pg-attention-key" hidden>
+                      <i aria-hidden="true"></i>
+                      <span>top 5 final-block attention paths</span>
+                    </div>
+                  </div>
+                  <div class="readout mono" id="pg-readout" aria-live="polite"></div>
+                </article>
+              </div>
+              <p class="model-grid-note">
+                <strong>TFM note:</strong> its boundary is a single-view preview for speed; its
+                displayed probability is the full 8-view ensemble. This 20-row context is an
+                out-of-regime illustration: TabICLv2 was pretrained on 300 to 48K rows, and the
+                official authors have not tested generalization below 300 rows.
+                <a href="https://github.com/soda-inria/tabicl#faq" target="_blank" rel="noopener">See the official FAQ ↗</a>
+              </p>
+
+            </div>
+
+            <aside class="dock playground-controls">
+              <div class="group comparison-dataset-control">
+                <label class="group__label mono" for="pg-dataset">dataset</label>
+                <select id="pg-dataset" class="select">
+                  <option value="interaction" selected>Nonlinear interaction</option>
+                  <option value="moons">Ribbons</option>
+                  <option value="circles">Shells</option>
+                  <option value="xor">2D XOR</option>
+                  <option value="blobs">Blobs</option>
+                </select>
+              </div>
+
+              <p class="sr-only" id="pg-hint">Drag any query star; all four canvases update together.</p>
+            </aside>
+          </div>
+        </section>
+
+        <div class="architecture-divider reveal">
+          <span class="mono">part 2 · training</span>
+          <h3>How does the model learn this behavior across synthetic tasks?</h3>
+        </div>
+
+        <section class="training-live reveal" id="training-live" aria-labelledby="training-live-title">
+          <header>
+            <div>
+              <span class="mono">nanoTabICL implementation · TabICLv2 training graph</span>
+              <h3 id="training-live-title">Follow one toy task through nanoTabICL’s training graph</h3>
+              <p>The graph and tensor dimensions are faithful; the small task and output values are illustrative. Real TabICLv2 pretraining samples graph-SCM tasks in batches and does not run in this browser.</p>
+            </div>
+          </header>
+          <div class="training-live__body">
+            <nav class="training-live__steps architecture-flow" aria-label="Training episode steps">
+              <button class="is-active" type="button" data-training-step="0" aria-pressed="true">
+                <span class="architecture-flow__number mono">01</span>
+                <span class="architecture-flow__scene architecture-flow__scene--context" aria-hidden="true"><i></i><i></i><i></i><b>9 + 1</b></span>
+                <span class="architecture-flow__copy"><strong>Prepare &amp; embed</strong><small>standardize · group · add context y</small></span>
+              </button>
+              <button type="button" data-training-step="1" aria-pressed="false">
+                <span class="architecture-flow__number mono">02</span>
+                <span class="architecture-flow__scene architecture-flow__scene--forward" aria-hidden="true"><i></i><i></i><i></i><b>C · R · ICL</b></span>
+                <span class="architecture-flow__copy"><strong>Forward pass</strong><small>three attention stages</small></span>
+              </button>
+              <button type="button" data-training-step="2" aria-pressed="false">
+                <span class="architecture-flow__number mono">03</span>
+                <span class="architecture-flow__scene architecture-flow__scene--loss" aria-hidden="true"><i></i><i></i><b>−log p</b></span>
+                <span class="architecture-flow__copy"><strong>Query loss</strong><small>10-way cross-entropy</small></span>
+              </button>
+              <button type="button" data-training-step="3" aria-pressed="false">
+                <span class="architecture-flow__number mono">04</span>
+                <span class="architecture-flow__scene architecture-flow__scene--update" aria-hidden="true"><i></i><i></i><b>θ → θ′</b></span>
+                <span class="architecture-flow__copy"><strong>Update weights</strong><small>batch gradient · Muon step</small></span>
+              </button>
+            </nav>
+            <div class="training-live__main">
+              <div class="technical-canvas-scroll" role="region" aria-label="Scrollable training visualization">
+                <canvas id="training-canvas" width="960" height="500" aria-label="Step-selectable explanatory simulation of one nanoTabICL training episode"></canvas>
+              </div>
+              <details class="cyclic-explainer" id="training-cyclic-details">
+                <summary>
+                  <span><small class="mono">Step 01 explainer</small><strong>Standardize first, then shift and wrap features</strong></span>
+                  <i class="mono" aria-hidden="true">open +</i>
+                </summary>
+                <div class="cyclic-explainer__body">
+                  <p>
+                    nanoTabICL first standardizes every feature using statistics from the
+                    context rows only. It then follows the TabICLv2 paper convention: every
+                    position collects offsets <code>0</code>, <code>+1</code>, and
+                    <code>+3</code>, wrapping past the final column.
+                  </p>
+                  <div class="cyclic-explainer__formula">
+                    <span class="mono">context standardization</span>
+                    <code>x′<sub>ij</sub> = (x<sub>ij</sub> − μ<sub>j,context</sub>) / (σ<sub>j,context</sub> + ε)</code>
+                  </div>
+                  <div class="cyclic-explainer__formula">
+                    <span class="mono">zero-based position j</span>
+                    <code>group(j) = [x′<sub>1+(j mod d)</sub>, x′<sub>1+((j+1) mod d)</sub>, x′<sub>1+((j+3) mod d)</sub>]</code>
+                  </div>
+                  <div class="cyclic-explainer__map" aria-label="Cyclic feature groups for four columns">
+                    <div><b>x₁</b><i aria-hidden="true">→</i><code>[x′₁, x′₂, x′₄]</code></div>
+                    <div><b>x₂</b><i aria-hidden="true">→</i><code>[x′₂, x′₃, x′₁]</code></div>
+                    <div><b>x₃</b><i aria-hidden="true">→</i><code>[x′₃, x′₄, x′₂]</code></div>
+                    <div><b>x₄</b><i aria-hidden="true">→</i><code>[x′₄, x′₁, x′₃]</code></div>
+                  </div>
+                  <p class="cyclic-explainer__takeaway">
+                    The shared <code>Linear(3→128)</code> keeps four output positions while
+                    giving each feature repeated local context. Context cells then receive
+                    <code>y_embed_in(yᵢ)</code>; query cells receive no label embedding.
+                    The frozen browser checkpoint preserves TabICL 2.0.2’s cyclically shifted
+                    <code>+1,+2,+4</code> ordering, while this training explainer follows the
+                    paper and current nanoTabICL source.
+                  </p>
+                </div>
+              </details>
+              <details class="column-attention-explainer" id="training-column-details" hidden>
+                <summary>
+                  <span><small class="mono">Step 02 explainer</small><strong>How column and row attention differ</strong></span>
+                  <i class="mono" aria-hidden="true">open +</i>
+                </summary>
+                <div class="column-attention-explainer__body">
+                  <p>
+                    Before this stage, each context cell has already received
+                    <code>y_embed_in(yᵢ)</code>; the pink query cell has not. Each of the three
+                    column blocks reuses one learned bank of 128 inducing vectors independently
+                    across feature columns, rather than learning a different bank per column.
+                  </p>
+                  <div class="column-attention-explainer__passes">
+                    <article>
+                      <span class="mono">pass 1 · summarize context</span>
+                      <strong>I ← C1…C9</strong>
+                      <p>Inducing tokens query every context cell and produce 128 column summaries.</p>
+                    </article>
+                    <i aria-hidden="true">→</i>
+                    <article>
+                      <span class="mono">pass 2 · update cells</span>
+                      <strong>C1…C9, Q ← I</strong>
+                      <p>All cells, including Q, read those summaries. Information reaches Q through I.</p>
+                    </article>
+                  </div>
+                  <p class="column-attention-explainer__why">
+                    <strong>Why use I?</strong> It creates a fixed-size context memory and changes
+                    per-column row attention from <code>O(n²)</code> to approximately
+                    <code>O(nk)</code>, where <code>k = 128</code> inducing tokens; across
+                    <code>d</code> feature columns the attention cost is approximately
+                    <code>O(dnk)</code>. QASSMax is used in the context-summarizing pass.
+                  </p>
+                  <section class="row-attention-explainer" aria-labelledby="row-attention-explainer-title">
+                    <header>
+                      <span class="mono">row attention · no inducing tokens</span>
+                      <h5 id="row-attention-explainer-title">One short sequence is processed independently for each row</h5>
+                    </header>
+                    <div class="row-attention-explainer__flow">
+                      <code>4 CLS tokens + 4 feature tokens</code>
+                      <i aria-hidden="true">→</i>
+                      <code>blocks 1–2: all 8 query all 8</code>
+                      <i aria-hidden="true">→</i>
+                      <code>block 3: 4 CLS query all 8</code>
+                      <i aria-hidden="true">→</i>
+                      <code>LayerNorm + concatenate = 512D</code>
+                    </div>
+                    <p>
+                      All three row blocks use RoPE. Eight tokens are already cheap to attend
+                      directly, and the first two blocks preserve feature-to-feature interactions.
+                      The last block computes only the four CLS outputs. Unlike inducing tokens,
+                      CLS tokens collect one row’s output; they do not mediate attention between rows.
+                    </p>
+                  </section>
+                  <div class="training-token-legend" id="training-token-legend" hidden>
+                    <div><i class="is-cell" aria-hidden="true"></i><span><strong>Cell token</strong><small>A standardized feature group embedded to 128D; context cells also carry the first y embedding.</small></span></div>
+                    <div><i class="is-inducing" aria-hidden="true">I</i><span><strong>Inducing tokens</strong><small>One 128-vector bank per block, shared across columns, summarizes context cells.</small></span></div>
+                    <div><i class="is-cls" aria-hidden="true">CLS</i><span><strong>CLS tokens</strong><small>Four learned collectors; concatenate their 128D outputs to make one 512D row.</small></span></div>
+                    <div><i class="is-query" aria-hidden="true">Q</i><span><strong>Query token</strong><small>Its features travel through every stage; only its label is withheld.</small></span></div>
+                    <p><strong>Query path:</strong> three column blocks → three row blocks → 512D query token → twelve ICL blocks → LayerNorm + MLP → ten logits.</p>
+                  </div>
+                </div>
+              </details>
+              <div class="training-live__detail" aria-live="polite" aria-atomic="true">
+                <span class="mono" id="training-detail-label">step 1 · prepare and embed</span>
+                <h4 id="training-detail-title">Standardize from context, then create repeated feature groups</h4>
+                <p id="training-detail-copy">Use context mean and standard deviation, group offsets 0, +1, and +3 with wrap-around, project each group to 128D, then add the first label embedding to context cells only.</p>
+                <code id="training-detail-example">10×4 → standardize → 10×4×3 → 10×4×128 + y_embed_in(context)</code>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="primary-links reveal mono" aria-label="Primary architecture sources">
+          <a href="https://arxiv.org/abs/2112.10510" target="_blank" rel="noopener">PFN paper ↗</a>
+          <a href="https://arxiv.org/abs/2602.11139" target="_blank" rel="noopener">TabICLv2 paper ↗</a>
+          <a href="https://github.com/soda-inria/nanotabicl" target="_blank" rel="noopener">nanoTabICL repository ↗</a>
+        </div>
+
+        <div class="architecture-divider architecture-divider--inference reveal" id="inference-architecture">
+          <span class="mono">part 3 · inference</span>
+          <h3>How does the frozen graph use context to answer a query?</h3>
+        </div>
+        <div class="prose reveal">
+          <p>
+            Inference repeats the same preprocessing and 3-column / 3-row / 12-ICL-block
+            forward graph, but stops after prediction. Context labels are embedded; the query
+            label is unavailable; pretrained weights remain frozen. There is no loss,
+            backpropagation, or task-specific optimizer step in this diagram.
+            <a class="cite" href="https://arxiv.org/abs/2602.11139" target="_blank" rel="noopener">[Qu et al., 2026]</a>
+          </p>
+        </div>
+
+        <div class="nano-example reveal">
+          <span class="mono">same toy table as training</span>
+          <strong>9 context rows + 1 query row</strong>
+          <strong>4 features</strong>
+          <strong>2 active classes</strong>
+          <strong>weights frozen</strong>
+        </div>
+
+        <section class="inference-live reveal" id="inference-live" aria-labelledby="inference-live-title">
+          <header>
+            <div>
+              <span class="mono">same graph · inference mode · weights frozen</span>
+              <h3 id="inference-live-title">Trace the same toy table without an update step</h3>
+              <p>This is a shape-faithful schematic. Select a stage to inspect what is reused from training and what changes at inference.</p>
+            </div>
+          </header>
+          <nav class="inference-live__steps architecture-flow" aria-label="Inference architecture stages">
+            <button class="is-active" type="button" data-inference-step="0" aria-pressed="true">
+              <span class="architecture-flow__number mono">01</span>
+              <span class="architecture-flow__scene architecture-flow__scene--context" aria-hidden="true"><i></i><i></i><i></i><b>10×4</b></span>
+              <span class="architecture-flow__copy"><strong>Prepare cells</strong><small>standardize · group · context y</small></span>
+            </button>
+            <button type="button" data-inference-step="1" aria-pressed="false">
+              <span class="architecture-flow__number mono">02</span>
+              <span class="architecture-flow__scene architecture-flow__scene--column" aria-hidden="true"><i></i><i></i><i></i><b>column</b></span>
+              <span class="architecture-flow__copy"><strong>Column attention</strong><small>3 induced blocks · context K/V</small></span>
+            </button>
+            <button type="button" data-inference-step="2" aria-pressed="false">
+              <span class="architecture-flow__number mono">03</span>
+              <span class="architecture-flow__scene architecture-flow__scene--row" aria-hidden="true"><i></i><i></i><i></i><b>512D</b></span>
+              <span class="architecture-flow__copy"><strong>Row compression</strong><small>3 RoPE blocks · 4 CLS → 512D</small></span>
+            </button>
+            <button type="button" data-inference-step="3" aria-pressed="false">
+              <span class="architecture-flow__number mono">04</span>
+              <span class="architecture-flow__scene architecture-flow__scene--output" aria-hidden="true"><i></i><i></i><b>ŷ</b></span>
+              <span class="architecture-flow__copy"><strong>Dataset ICL + output</strong><small>12 blocks · LN · MLP · active classes</small></span>
+            </button>
+          </nav>
+          <div class="inference-live__main">
+            <div class="technical-canvas-scroll" role="region" aria-label="Scrollable inference visualization">
+              <canvas id="inference-canvas" width="960" height="500" aria-label="Step-selectable 3D tensor visualization of nanoTabICL inference"></canvas>
+            </div>
+            <div class="inference-live__detail" aria-live="polite" aria-atomic="true">
+              <span class="mono" id="inference-detail-label">stage 1 · cells and cyclic grouping</span>
+              <h4 id="inference-detail-title">Standardize, group each feature position, then embed it</h4>
+              <p id="inference-detail-copy">Use context statistics, then gather j, j+1, and j+3 modulo d under the paper/current nanoTabICL convention. For d=4, x₁ maps to [x′₁, x′₂, x′₄]. Context cells receive y_embed_in; the query does not.</p>
+              <code id="inference-detail-example">10×4 + separate context y → z-score → 10×4×3 → 10×4×128</code>
+            </div>
+          </div>
+        </section>
+
+        <a class="section-prompt reveal" href="#live-explainer">
+          <span>The model graph is clear. Next, inspect a real forward pass.</span>
+          <span aria-hidden="true">Continue to the live model explorer ↓</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================== 05 · LIVE MODEL EXPLORER ===================== -->
+    <section class="sec sec--explainer" id="live-explainer">
+      <div class="wrap">
+        <p class="sec__num mono reveal">05 · Live model explorer</p>
+        <h2 class="sec__title reveal">Trace a real Iris prediction</h2>
+        <div class="prose reveal">
+          <p>
+            The embedded explorer runs mapped upstream TabICLv2 classifier weights locally.
+            Select a query, follow the context rows through the model, and inspect real
+            selected-view attention and output probabilities.
+          </p>
+          <p>
+            <strong>Scope:</strong> its 12-row Iris context is deliberately small for tracing and
+            is outside TabICLv2's documented 300 to 48K-row pretraining regime. Treat the output
+            as an out-of-regime illustration, not evidence of expected model quality.
+          </p>
+          <p>
+            <strong>Implementation note:</strong> The main playground runs the complete
+            eight-view browser classifier. This embedded inspector uses the selected-view
+            nanoTabICL-shaped bridge adapted to the released TabICLv2 checkpoint so its
+            intermediate tensors remain traceable. It is not the standalone nanoTabICL model.
+          </p>
+        </div>
+        <aside class="explainer-attribution reveal" aria-label="Interface attribution">
+          <span class="mono">Interface credit</span>
+          <p>
+            Adapted from the open-source
+            <a href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noopener">Transformer Explainer</a>
+            by <a href="https://arxiv.org/abs/2408.04619" target="_blank" rel="noopener">Aeree Cho et al.</a>
+            at the Polo Club of Data Science, used under the MIT License.
+          </p>
+          <a href="https://github.com/poloclub/transformer-explainer" target="_blank" rel="noopener">View upstream code ↗</a>
+        </aside>
+        <div class="explainer-embed reveal">
+          <iframe
+            src="tabicl-explainer/"
+            title="Interactive TabICL v2 model explorer"
+            loading="lazy"
+            allow="fullscreen"
+          ></iframe>
+        </div>
+        <div class="explainer-actions reveal">
+          <span class="mono">The explorer scales its original 1880px visualization to this frame.</span>
+          <a href="tabicl-explainer/" target="_blank" rel="noopener">Open full screen ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 06 · REFERENCE COLLECTION ===================== -->
+    <section class="sec" id="landscape">
+      <div class="wrap">
+        <p class="sec__num mono reveal">06 · References</p>
+        <h2 class="sec__title reveal">References</h2>
+        <div class="prose reveal">
+          <p>
+            Primary papers, implementations, checkpoints, datasets, and evaluation suites cited
+            throughout this tutorial.
+          </p>
+        </div>
+
+        <div class="reference-collection reveal">
+          <section>
+            <header><span class="mono">models</span><h3>Tabular foundation models</h3></header>
+            <div class="reference-grid">
+              <article>
+                <h4>TabPFN v3</h4>
+                <p>General classification and regression with large-context variants.</p>
+                <div><a href="https://arxiv.org/abs/2605.13986" target="_blank" rel="noopener">paper ↗</a><a href="https://github.com/PriorLabs/tabpfn" target="_blank" rel="noopener">code ↗</a><a href="https://docs.priorlabs.ai/" target="_blank" rel="noopener">docs + weights ↗</a></div>
+              </article>
+              <article class="is-focus">
+                <h4>TabICLv2</h4>
+                <p>Open compress-then-ICL model and the main reference for this tutorial.</p>
+                <div><a href="https://arxiv.org/abs/2602.11139" target="_blank" rel="noopener">paper ↗</a><a href="https://github.com/soda-inria/tabicl" target="_blank" rel="noopener">code + weights ↗</a><a href="https://github.com/soda-inria/nanotabicl" target="_blank" rel="noopener">nano code ↗</a><a href="model/PROVENANCE.md">browser export ↗</a></div>
+              </article>
+              <article>
+                <h4>Nori</h4>
+                <p>Open synthetic-pretrained foundation model for tabular regression.</p>
+                <div><a href="https://doi.org/10.5281/zenodo.20710462" target="_blank" rel="noopener">report ↗</a><a href="https://github.com/Synthefy/synthefy-nori" target="_blank" rel="noopener">code ↗</a><a href="https://huggingface.co/Synthefy/Nori" target="_blank" rel="noopener">weights ↗</a></div>
+              </article>
+            </div>
+          </section>
+
+          <section>
+            <header><span class="mono">evaluation</span><h3>Evaluation benchmarks</h3></header>
+            <div class="reference-grid">
+              <article>
+                <h4>TabArena</h4>
+                <p>Living benchmark and leaderboard for curated IID tabular tasks.</p>
+                <div><a href="https://arxiv.org/abs/2506.16791" target="_blank" rel="noopener">paper ↗</a><a href="https://github.com/autogluon/tabarena" target="_blank" rel="noopener">code ↗</a><a href="https://tabarena.ai/" target="_blank" rel="noopener">leaderboard ↗</a></div>
+              </article>
+              <article>
+                <h4>BeyondArena</h4>
+                <p>Evaluation across IID, temporal, grouped, large, and high-dimensional tasks.</p>
+                <div><a href="https://arxiv.org/abs/2606.30410" target="_blank" rel="noopener">paper ↗</a><a href="https://github.com/autogluon/tabarena" target="_blank" rel="noopener">code ↗</a><a href="https://github.com/tabarena/data-foundry" target="_blank" rel="noopener">data tools ↗</a></div>
+              </article>
+              <article>
+                <h4>ScoringBench</h4>
+                <p>Probabilistic regression benchmark using proper scoring rules for predictive distributions.</p>
+                <div><a href="https://arxiv.org/abs/2603.29928" target="_blank" rel="noopener">paper ↗</a><a href="https://github.com/jonaslandsgesell/ScoringBench" target="_blank" rel="noopener">code ↗</a><a href="https://scoringbench.bolt.host/" target="_blank" rel="noopener">leaderboard ↗</a></div>
+              </article>
+              <article>
+                <h4>TALENT</h4>
+                <p>Broad toolbox and benchmark for classical and deep tabular methods.</p>
+                <div><a href="https://www.jmlr.org/papers/v26/25-0512.html" target="_blank" rel="noopener">paper ↗</a><a href="https://github.com/LAMDA-Tabular/TALENT" target="_blank" rel="noopener">code ↗</a></div>
+              </article>
+              <article>
+                <h4>TabZilla</h4>
+                <p>A suite of 36 difficult datasets for comparing tabular algorithms.</p>
+                <div><a href="https://arxiv.org/abs/2305.02997" target="_blank" rel="noopener">paper ↗</a><a href="https://github.com/naszilla/tabzilla" target="_blank" rel="noopener">code ↗</a></div>
+              </article>
+            </div>
+          </section>
+
+          <section>
+            <header><span class="mono">supporting work</span><h3>Methods, data, and materials</h3></header>
+            <div class="reference-grid reference-grid--compact">
+              <article><h4>PFNs</h4><div><a href="https://arxiv.org/abs/2112.10510" target="_blank" rel="noopener">paper ↗</a></div></article>
+              <article><h4>XGBoost</h4><div><a href="https://doi.org/10.1145/2939672.2939785" target="_blank" rel="noopener">paper ↗</a><a href="https://github.com/dmlc/xgboost" target="_blank" rel="noopener">code ↗</a></div></article>
+              <article><h4>Online Shoppers</h4><div><a href="https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset" target="_blank" rel="noopener">dataset ↗</a></div></article>
+              <article><h4>Transformer Explainer (MIT)</h4><div><a href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noopener">website ↗</a><a href="https://github.com/poloclub/transformer-explainer" target="_blank" rel="noopener">code ↗</a></div></article>
+              <article><h4>The Illustrated Transformer</h4><div><a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener">visual reference ↗</a></div></article>
+              <article><h4>Three.js (MIT)</h4><div><a href="https://github.com/mrdoob/three.js/" target="_blank" rel="noopener">code ↗</a></div></article>
+              <article><h4>This tutorial</h4><div><a href="https://github.com/Affirm/tabular-foundation-models-tutorial" target="_blank" rel="noopener">code + materials ↗</a></div></article>
+            </div>
+          </section>
+        </div>
+        <p class="reference-note reveal">
+          Code and checkpoints can use different licenses. Check upstream terms before reuse.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================== AUTHORS ===================== -->
+    <section id="authors">
+      <div class="wrap">
+        <p><strong>Authors:</strong> Jiarui Xu, Tianming Zhou, Tommy Tai, Joshua Pan, Alexander Statnikov, Nitesh Kumar</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot__inner">
+      <span class="mono">Built for the NeurIPS 2026 Education Track</span>
+      <a class="mono" href="https://github.com/Affirm/tabular-foundation-models-tutorial" target="_blank" rel="noopener">source and materials ↗</a>
+    </div>
+  </footer>
+
+  <script type="module" src="js/site.js"></script>
+  <script type="module" src="js/hero3d.js"></script>
+  <script type="module" src="js/playground.js"></script>
+</body>
+</html>

@@ -1,0 +1,3869 @@
+{
+  "schema": "tabicl-browser-js/flat-tensors-v1",
+  "task": "classifier",
+  "package": "tabicl==2.0.2",
+  "repo_id": "jingang/TabICL",
+  "repo_revision": "4dcd344ece2c00be9e831fdd35bed57b5ad83e19",
+  "checkpoint": "tabicl-classifier-v2-20260212.ckpt",
+  "checkpoint_sha256": "bdc7dbd5e4ff21f8f0456fcf90c6b7cdf72dbea960f2d05b19bec19f9b3d4ed0",
+  "mode": "int8",
+  "binary": "tabicl.bin",
+  "binary_sha256": "ee6294132561242077b50dd2da7d0d42794fe0edb1cb53fb67512280d21d71fb",
+  "total_bytes": 27894972,
+  "n_tensors": 391,
+  "n_params": 27552258,
+  "config": {
+    "max_classes": 10,
+    "num_quantiles": 999,
+    "embed_dim": 128,
+    "col_num_blocks": 3,
+    "col_nhead": 8,
+    "col_num_inds": 128,
+    "col_affine": false,
+    "col_feature_group": "same",
+    "col_feature_group_size": 3,
+    "col_target_aware": true,
+    "col_ssmax": "qassmax-mlp-elementwise",
+    "row_num_blocks": 3,
+    "row_nhead": 8,
+    "row_num_cls": 4,
+    "row_rope_base": 100000,
+    "row_rope_interleaved": false,
+    "icl_num_blocks": 12,
+    "icl_nhead": 8,
+    "icl_ssmax": "qassmax-mlp-elementwise",
+    "ff_factor": 2,
+    "dropout": 0.0,
+    "activation": "gelu",
+    "norm_first": true,
+    "bias_free_ln": false,
+    "recompute": false
+  },
+  "tensors": [
+    {
+      "name": "col_embedder.in_linear.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 0
+    },
+    {
+      "name": "col_embedder.in_linear.weight",
+      "shape": [
+        128,
+        3
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 256
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.ind_vectors",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 1152
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.in_proj_bias",
+      "shape": [
+        384
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 18048
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.in_proj_weight",
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 384,
+      "offset": 18816
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.out_proj.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 69504
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.out_proj.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 69760
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 86656
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 86784
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 87104
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 87360
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 96064
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        16
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 96192
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        16
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 97472
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        16,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 16,
+      "offset": 97504
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.linear1.bias",
+      "shape": [
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 98592
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.linear1.weight",
+      "shape": [
+        256,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 256,
+      "offset": 99104
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.linear2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 132896
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.linear2.weight",
+      "shape": [
+        128,
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 133152
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.norm1.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 166432
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.norm1.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 166688
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.norm2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 166944
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn1.norm2.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 167200
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.attn.in_proj_bias",
+      "shape": [
+        384
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 167456
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.attn.in_proj_weight",
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 384,
+      "offset": 168224
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.attn.out_proj.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 218912
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.attn.out_proj.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 219168
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.linear1.bias",
+      "shape": [
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 236064
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.linear1.weight",
+      "shape": [
+        256,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 256,
+      "offset": 236576
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.linear2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 270368
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.linear2.weight",
+      "shape": [
+        128,
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 270624
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.norm1.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 303904
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.norm1.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 304160
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.norm2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 304416
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.0.multihead_attn2.norm2.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 304672
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.ind_vectors",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 304928
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.in_proj_bias",
+      "shape": [
+        384
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 321824
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.in_proj_weight",
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 384,
+      "offset": 322592
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.out_proj.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 373280
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.out_proj.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 373536
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 390432
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 390560
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 390880
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 391136
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 399840
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        16
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 399968
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        16
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 401248
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        16,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 16,
+      "offset": 401280
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.linear1.bias",
+      "shape": [
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 402368
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.linear1.weight",
+      "shape": [
+        256,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 256,
+      "offset": 402880
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.linear2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 436672
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.linear2.weight",
+      "shape": [
+        128,
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 436928
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.norm1.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 470208
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.norm1.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 470464
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.norm2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 470720
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn1.norm2.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 470976
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.attn.in_proj_bias",
+      "shape": [
+        384
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 471232
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.attn.in_proj_weight",
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 384,
+      "offset": 472000
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.attn.out_proj.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 522688
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.attn.out_proj.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 522944
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.linear1.bias",
+      "shape": [
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 539840
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.linear1.weight",
+      "shape": [
+        256,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 256,
+      "offset": 540352
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.linear2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 574144
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.linear2.weight",
+      "shape": [
+        128,
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 574400
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.norm1.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 607680
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.norm1.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 607936
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.norm2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 608192
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.1.multihead_attn2.norm2.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 608448
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.ind_vectors",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 608704
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.in_proj_bias",
+      "shape": [
+        384
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 625600
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.in_proj_weight",
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 384,
+      "offset": 626368
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.out_proj.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 677056
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.out_proj.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 677312
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 694208
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 694336
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 694656
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 694912
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 703616
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        16
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 703744
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        16
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 705024
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        16,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 16,
+      "offset": 705056
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.linear1.bias",
+      "shape": [
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 706144
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.linear1.weight",
+      "shape": [
+        256,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 256,
+      "offset": 706656
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.linear2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 740448
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.linear2.weight",
+      "shape": [
+        128,
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 740704
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.norm1.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 773984
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.norm1.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 774240
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.norm2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 774496
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn1.norm2.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 774752
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.attn.in_proj_bias",
+      "shape": [
+        384
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 775008
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.attn.in_proj_weight",
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 384,
+      "offset": 775776
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.attn.out_proj.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 826464
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.attn.out_proj.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 826720
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.linear1.bias",
+      "shape": [
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 843616
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.linear1.weight",
+      "shape": [
+        256,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 256,
+      "offset": 844128
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.linear2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 877920
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.linear2.weight",
+      "shape": [
+        128,
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 878176
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.norm1.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 911456
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.norm1.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 911712
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.norm2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 911968
+    },
+    {
+      "name": "col_embedder.tf_col.blocks.2.multihead_attn2.norm2.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 912224
+    },
+    {
+      "name": "col_embedder.y_encoder.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 912480
+    },
+    {
+      "name": "col_embedder.y_encoder.weight",
+      "shape": [
+        128,
+        10
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 912736
+    },
+    {
+      "name": "icl_predictor.decoder.0.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 914528
+    },
+    {
+      "name": "icl_predictor.decoder.0.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 916576
+    },
+    {
+      "name": "icl_predictor.decoder.2.bias",
+      "shape": [
+        10
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 1444960
+    },
+    {
+      "name": "icl_predictor.decoder.2.weight",
+      "shape": [
+        10,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 10,
+      "offset": 1444980
+    },
+    {
+      "name": "icl_predictor.ln.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 1455260
+    },
+    {
+      "name": "icl_predictor.ln.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 1456284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 1457308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 1460380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 2252956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 2253980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 2518172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 2518300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 2518620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 2519644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 2554460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 2554588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 2558940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 2559068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 2563420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 2565468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 3093852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 3094876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 3621212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 3622236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 3623260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.0.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 3624284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 3625308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 3628380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 4420956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 4421980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 4686172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 4686300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 4686620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 4687644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 4722460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 4722588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 4726940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 4727068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 4731420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 4733468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 5261852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 5262876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 5789212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 5790236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 5791260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.1.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 5792284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 5793308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 5796380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 6588956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 6589980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 6854172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 6854300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 6854620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 6855644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 6890460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 6890588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 6894940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 6895068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 6899420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 6901468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 7429852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 7430876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 7957212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 7958236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 7959260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.10.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 7960284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 7961308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 7964380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 8756956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 8757980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 9022172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 9022300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 9022620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 9023644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 9058460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 9058588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 9062940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 9063068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 9067420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 9069468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 9597852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 9598876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 10125212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 10126236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 10127260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.11.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 10128284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 10129308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 10132380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 10924956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 10925980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 11190172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 11190300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 11190620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 11191644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 11226460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 11226588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 11230940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 11231068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 11235420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 11237468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 11765852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 11766876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 12293212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 12294236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 12295260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.2.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 12296284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 12297308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 12300380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 13092956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 13093980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 13358172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 13358300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 13358620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 13359644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 13394460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 13394588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 13398940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 13399068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 13403420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 13405468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 13933852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 13934876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 14461212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 14462236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 14463260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.3.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 14464284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 14465308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 14468380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 15260956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 15261980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 15526172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 15526300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 15526620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 15527644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 15562460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 15562588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 15566940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 15567068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 15571420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 15573468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 16101852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 16102876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 16629212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 16630236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 16631260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.4.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 16632284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 16633308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 16636380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 17428956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 17429980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 17694172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 17694300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 17694620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 17695644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 17730460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 17730588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 17734940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 17735068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 17739420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 17741468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 18269852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 18270876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 18797212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 18798236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 18799260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.5.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 18800284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 18801308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 18804380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 19596956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 19597980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 19862172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 19862300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 19862620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 19863644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 19898460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 19898588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 19902940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 19903068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 19907420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 19909468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 20437852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 20438876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 20965212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 20966236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 20967260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.6.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 20968284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 20969308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 20972380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 21764956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 21765980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 22030172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 22030300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 22030620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 22031644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 22066460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 22066588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 22070940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 22071068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 22075420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 22077468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 22605852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 22606876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 23133212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 23134236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 23135260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.7.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 23136284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 23137308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 23140380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 23932956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 23933980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 24198172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 24198300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 24198620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 24199644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 24234460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 24234588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 24238940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 24239068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 24243420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 24245468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 24773852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 24774876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 25301212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 25302236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 25303260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.8.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 25304284
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.in_proj_bias",
+      "shape": [
+        1536
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 25305308
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.in_proj_weight",
+      "shape": [
+        1536,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1536,
+      "offset": 25308380
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.out_proj.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 26100956
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.out_proj.weight",
+      "shape": [
+        512,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 26101980
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.ssmax_layer.base_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 26366172
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.ssmax_layer.base_mlp.0.weight",
+      "shape": [
+        64,
+        1
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 26366300
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.ssmax_layer.base_mlp.2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 26366620
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.ssmax_layer.base_mlp.2.weight",
+      "shape": [
+        512,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 26367644
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.ssmax_layer.query_mlp.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 26402460
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.ssmax_layer.query_mlp.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 26402588
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.ssmax_layer.query_mlp.2.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 26406940
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.attn.ssmax_layer.query_mlp.2.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 64,
+      "offset": 26407068
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.linear1.bias",
+      "shape": [
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 26411420
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.linear1.weight",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 1024,
+      "offset": 26413468
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.linear2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 26941852
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.linear2.weight",
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 26942876
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.norm1.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27469212
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.norm1.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27470236
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.norm2.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27471260
+    },
+    {
+      "name": "icl_predictor.tf_icl.blocks.9.norm2.weight",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27472284
+    },
+    {
+      "name": "icl_predictor.y_encoder.bias",
+      "shape": [
+        512
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27473308
+    },
+    {
+      "name": "icl_predictor.y_encoder.weight",
+      "shape": [
+        512,
+        10
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 512,
+      "offset": 27474332
+    },
+    {
+      "name": "row_interactor.cls_tokens",
+      "shape": [
+        4,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 4,
+      "offset": 27481500
+    },
+    {
+      "name": "row_interactor.out_ln.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27482028
+    },
+    {
+      "name": "row_interactor.out_ln.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27482284
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.attn.in_proj_bias",
+      "shape": [
+        384
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27482540
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.attn.in_proj_weight",
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 384,
+      "offset": 27483308
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.attn.out_proj.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27533996
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.attn.out_proj.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 27534252
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.linear1.bias",
+      "shape": [
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27551148
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.linear1.weight",
+      "shape": [
+        256,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 256,
+      "offset": 27551660
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.linear2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27585452
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.linear2.weight",
+      "shape": [
+        128,
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 27585708
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.norm1.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27618988
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.norm1.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27619244
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.norm2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27619500
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.0.norm2.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27619756
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.attn.in_proj_bias",
+      "shape": [
+        384
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27620012
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.attn.in_proj_weight",
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 384,
+      "offset": 27620780
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.attn.out_proj.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27671468
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.attn.out_proj.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 27671724
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.linear1.bias",
+      "shape": [
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27688620
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.linear1.weight",
+      "shape": [
+        256,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 256,
+      "offset": 27689132
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.linear2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27722924
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.linear2.weight",
+      "shape": [
+        128,
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 27723180
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.norm1.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27756460
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.norm1.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27756716
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.norm2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27756972
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.1.norm2.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27757228
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.attn.in_proj_bias",
+      "shape": [
+        384
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27757484
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.attn.in_proj_weight",
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 384,
+      "offset": 27758252
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.attn.out_proj.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27808940
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.attn.out_proj.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 27809196
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.linear1.bias",
+      "shape": [
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27826092
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.linear1.weight",
+      "shape": [
+        256,
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 256,
+      "offset": 27826604
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.linear2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27860396
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.linear2.weight",
+      "shape": [
+        128,
+        256
+      ],
+      "dtype": "float32",
+      "qtype": "int8",
+      "out_ch": 128,
+      "offset": 27860652
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.norm1.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27893932
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.norm1.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27894188
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.norm2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27894444
+    },
+    {
+      "name": "row_interactor.tf_row.blocks.2.norm2.weight",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27894700
+    },
+    {
+      "name": "row_interactor.tf_row.rope.freqs",
+      "shape": [
+        8
+      ],
+      "dtype": "float32",
+      "qtype": "fp16",
+      "offset": 27894956
+    }
+  ]
+}

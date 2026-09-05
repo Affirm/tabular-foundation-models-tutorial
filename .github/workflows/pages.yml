@@ -1,0 +1,60 @@
+name: Deploy TabICL website to GitHub Pages
+
+# Publishes materials/website as the repository's GitHub Pages site after
+# building the standalone Svelte explorer.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "materials/website/**"
+      - "materials/tabicl-explainer/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; don't cancel an in-progress publish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: materials/tabicl-explainer/package-lock.json
+
+      - name: Build TabICL explorer
+        working-directory: materials/tabicl-explainer
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload website artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload only the site folder so it becomes the Pages root;
+          # all asset paths in index.html are relative to this dir.
+          path: materials/website
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

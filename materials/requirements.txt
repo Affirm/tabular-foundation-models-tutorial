@@ -1,0 +1,15 @@
+# Reproducible teaching environment. Use Python 3.11.x.
+numpy==1.26.4
+pandas==2.2.3
+scikit-learn==1.6.1
+matplotlib==3.10.1
+openml==0.15.1
+# sklearn compatibility was fixed in XGBoost 2.1.4.
+xgboost==2.1.4
+tabicl==2.2.0
+torch==2.2.2
+huggingface-hub==1.30.0
+# Notebook execution dependencies used locally and in CI.
+ipykernel==6.29.5
+nbclient==0.10.2
+nbconvert==7.16.6
