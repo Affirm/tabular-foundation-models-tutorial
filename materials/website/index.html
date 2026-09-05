@@ -88,25 +88,13 @@
           for new rows in a single forward pass, without task-specific gradient updates.
         </p>
         <div class="hero__cta">
-          <a class="btn btn--primary" href="#prerequisites">Start reading</a>
+          <a class="btn btn--primary" href="#problem">Start reading</a>
           <a class="btn btn--ghost" href="#playground">Skip to the live model</a>
         </div>
       </div>
     </div>
-    <a class="scrollcue mono" href="#prerequisites" aria-label="Scroll down">scroll ↓</a>
+    <a class="scrollcue mono" href="#problem" aria-label="Scroll down">scroll ↓</a>
   </section>
-
-  <aside class="prereq-strip" id="prerequisites" aria-labelledby="prereq-title">
-    <div class="wrap prereq-strip__inner">
-      <p class="prereq-strip__label mono" id="prereq-title">Recommended background</p>
-      <ul>
-        <li>supervised learning</li>
-        <li>train and test splits</li>
-        <li>probability</li>
-        <li>attention</li>
-      </ul>
-    </div>
-  </aside>
 
   <main>
     <!-- ===================== 01 · THE PROBLEM ===================== -->
@@ -656,8 +644,6 @@
               </div>
               <div class="scm-lab__actions">
                 <button id="scm-btn" type="button">Sample a new SCM</button>
-                <button id="scm-row-btn" type="button">Generate one row</button>
-                <button id="scm-task-btn" type="button">Generate 20-row task</button>
               </div>
             </header>
 
@@ -723,6 +709,11 @@
                   <small>Low noise makes the relationship clearer; high noise makes rows less predictable.</small>
                 </label>
               </section>
+            </div>
+
+            <div class="scm-lab__actions scm-lab__actions--rows">
+              <button id="scm-row-btn" type="button">Generate one row</button>
+              <button id="scm-task-btn" type="button">Generate 20-row task</button>
             </div>
 
             <section class="scm-dataset" aria-labelledby="scm-dataset-title">
