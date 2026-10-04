@@ -1,188 +1,99 @@
-# An Interactive Guide to Tabular Foundation Models
+# Tabular Foundation Models Tutorial
 
-Interactive teaching materials created for the
-[NeurIPS 2026 Education Track](https://neurips.cc/Conferences/2026/CallforEducationalResources).
-The tutorial explains how tabular foundation models use labeled rows as inference
-context, with TabICLv2 as the reproducible worked example.
+[Interactive website](https://affirm.github.io/tabular-foundation-models-tutorial/) · [Python notebook](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb) · [Model landscape](#model-landscape) · [Learning resources](#tutorials-and-learning-resources)
 
-- **Deployed site:** https://affirm.github.io/tabular-foundation-models-tutorial/
-- **Repository:** https://github.com/Affirm/tabular-foundation-models-tutorial
+Table as Prompt: An Interactive Guide to Tabular Foundation Models - accepted for presentation at the [NeurIPS 2026 Education Track](https://neurips.cc/Conferences/2026/CallforEducationalResources).
 
-## Teaching sequence
+![Tabular Foundation Models Tutorial: Interactive Guide, Papers and Code, and Benchmarks. Tabular in-context learning uses labeled examples and a new row's features as inputs to a pretrained Transformer with fixed weights to predict the new row's label.](assets/tabular-tutorial-overview.png)
 
-1. **Problem:** how mixed types, missingness, imbalance, and limited rows complicate prediction.
-2. **Adaptation:** fitting task-specific parameters compared with providing labeled context.
-3. **Theory:** an interactive PFN task-prior overview and its expected query-loss objective.
-4. **Architecture:** try four predictors side by side, then follow training and frozen inference.
-5. **Live model explorer:** a browser checkpoint with measured intermediate values.
-6. **References:** models, papers, code, weights, datasets, and benchmarks.
+## What are tabular foundation models?
 
-## Interactive visuals
+Tabular foundation models (TFMs) are pretrained predictors designed for reuse across tabular datasets. Conventional workflows fit and often tune a separate model for each dataset. PFN-style TFMs pretrain a shared predictor across sampled tasks. At inference, labeled rows provide context for predicting unlabeled query rows, without task-specific gradient updates. This adaptation through examples is **tabular in-context learning**.
 
-The site labels explanatory simulations separately from measured model execution.
+[Prior-data fitted networks (PFNs)](https://arxiv.org/abs/2112.10510) learn from tasks sampled from a prior. During pretraining, the model predicts held-out query labels from context rows. The task distribution and expected query loss shape its learned inductive bias. [TabPFN](https://arxiv.org/abs/2207.01848) demonstrated this approach for small tabular classification tasks. Our guide uses [TabICLv2](https://arxiv.org/abs/2602.11139) as a worked example; its architecture and inference procedure are model-specific, not shared by every TFM.
 
-| Visual | Implementation | What it represents |
-| --- | --- | --- |
-| Hero computation graph | Three.js in `hero3d.js` | Conceptual table-to-prediction flow. It performs no model computation. |
-| Table stress test | DOM and JavaScript in `site.js` | Real UCI Online Shoppers records with scripted perturbations. |
-| Boosted-tree comparison | Canvas and DOM in `site.js` | High-level task-specific fitting, not a full XGBoost implementation. |
-| PFN theory module | DOM, MathML, and JavaScript in `site.js` | Sampled tasks, context/query splits, predictions, numeric loss, and the expected training objective. |
-| Training flow | Canvas in `site.js` | A step-selectable simulation using nanoTabICL dimensions. It does not train the browser model. |
-| Inference flow | Canvas in `site.js` | A shape-accurate explanation of the nanoTabICL forward graph. |
-| Browser playground | Four canvases plus two Web Workers | Synchronized logistic, tree, kNN, and TabICLv2 probability fields over one dataset and query. Classical models run in one worker; the mixed int8/fp16 TabICLv2 port runs in another. |
-| Embedded architecture explorer | SvelteKit | Local selected-view execution with attention and tensor inspection inside the tutorial. |
+The broader goal is reusable prediction for structured data. The field now covers classification and regression across different table sizes, with open questions about robustness, scale, efficiency, and evaluation. Strong task-specific methods, including boosted trees, remain baselines for assessing where these models help.
 
-## Browser runtime
+## Model landscape
 
-```mermaid
-flowchart LR
-    HTML["index.html"] --> Site["site.js<br/>teaching interactions"]
-    HTML --> Hero["hero3d.js<br/>conceptual Three.js scene"]
-    HTML --> Playground["playground.js<br/>four-model comparison"]
-    Playground --> ClassicalWorker["classical-worker.js<br/>linear · tree · kNN"]
-    Playground --> TFMWorker["tabicl/worker.js<br/>8-view TabICL"]
-    ClassicalWorker --> ClassicalModels["classical-models.js"]
-    TFMWorker --> Runtime["classifier.js → core.js → browser-core.js"]
-    HTML --> Explorer["Svelte architecture explorer"]
-    Explorer --> LegacyRuntime["tabicl/nanotabicl.js<br/>selected-view inspection"]
-    Runtime --> Assets["model/manifest.json<br/>model/tabicl.bin"]
-```
+TFMs differ in what they learn from and how they adapt. Synthetic-prior models learn across generated tasks; real-data models learn across existing tables. Other work brings text semantics into prediction or extends the size of the inference context.
 
-The page preloads the 28 MB checkpoint and initializes it in the TabICL worker before the playground is used.
-Inference runs locally. No table rows are sent to a remote model service. The embedded
-explorer initializes its own model instance when its iframe loads.
+Selected milestones through October 4, 2026. Each date links to a primary source and identifies the event: a release, an announcement, or a paper. Preprint dates are the first arXiv submission dates; they do not establish when code or weights became available. Team labels identify a lead institution or the project maintainer; papers list the full author affiliations.
 
-## JavaScript map
+| Date | Model / team | Research direction | Dated source | Code / weights |
+| --- | --- | --- | --- | --- |
+| 2022-07-05 | [TabPFN](https://github.com/PriorLabs/TabPFN) · [![AutoML · Freiburg logo](https://avatars.githubusercontent.com/u/6469053?v=4&s=24) AutoML · Freiburg](https://www.automl.org/) | Synthetic-prior pretraining for in-context classification on small tables. | [Preprint](https://arxiv.org/abs/2207.01848) | [GitHub](https://github.com/PriorLabs/TabPFN) |
+| 2024-10-23 | [TabDPT](https://github.com/layer6ai-labs/TabDPT-inference) · [![Layer 6 logo](https://avatars.githubusercontent.com/u/31041018?v=4&s=24) Layer 6](https://github.com/layer6ai-labs) | Self-supervised pretraining on real tables, with retrieval for context selection. | [Preprint](https://arxiv.org/abs/2410.18164) | [GitHub](https://github.com/layer6ai-labs/TabDPT-inference) · [Hugging Face](https://huggingface.co/Layer6/TabDPT) |
+| 2025-01-08 | [TabPFNv2](https://github.com/PriorLabs/TabPFN) · [![Prior Labs logo](https://avatars.githubusercontent.com/u/144344393?v=4&s=24) Prior Labs](https://priorlabs.ai/) | Extends tabular prediction to regression and larger datasets. | [Nature paper](https://www.nature.com/articles/s41586-024-08328-6) | [GitHub](https://github.com/PriorLabs/TabPFN) · [Hugging Face](https://huggingface.co/Prior-Labs) |
+| 2025-02-08 | [TabICL](https://github.com/soda-inria/tabicl) · [![Inria logo](https://avatars.githubusercontent.com/u/98714838?v=4&s=24) Inria](https://github.com/soda-inria) | Builds row embeddings before in-context learning to handle larger tables. | [Preprint](https://arxiv.org/abs/2502.05564) | [GitHub](https://github.com/soda-inria/tabicl) · [Hugging Face](https://huggingface.co/jingang/TabICL) |
+| 2025-05-23 | [TabSTAR](https://github.com/alanarazi7/TabSTAR) · [Technion](https://eilamshapira.com/TabSTAR/) | Transfer learning with target-aware text representations. | [Preprint](https://arxiv.org/abs/2505.18125) | [GitHub](https://github.com/alanarazi7/TabSTAR) · [Hugging Face](https://huggingface.co/alana89/TabSTAR) |
+| 2025-06-12 | [ConTextTab](https://github.com/SAP-samples/sap-rpt-1-oss) · [![SAP logo](https://avatars.githubusercontent.com/u/2531208?v=4&s=24) SAP](https://github.com/SAP) | Combines semantic embeddings with tabular ICL and real-data pretraining. | [Preprint](https://arxiv.org/abs/2506.10707) | [GitHub](https://github.com/SAP-samples/sap-rpt-1-oss) · [Hugging Face](https://huggingface.co/SAP/sap-rpt-1-oss) |
+| 2025-07-22 | [Mitra](https://huggingface.co/autogluon/mitra-classifier) · [![AWS · AutoGluon logo](https://avatars.githubusercontent.com/u/2232217?v=4&s=24) AWS · AutoGluon](https://github.com/autogluon) | Uses a mixture of synthetic priors for classification and regression. | [Release announcement](https://www.amazon.science/blog/mitra-mixed-synthetic-priors-for-enhancing-tabular-foundation-models) | [GitHub](https://github.com/autogluon/autogluon) · [Hugging Face](https://huggingface.co/autogluon) |
+| 2025-09-03 | [LimiX](https://github.com/limix-ldm-ai/LimiX) · [![Stable AI logo](https://avatars.githubusercontent.com/u/261142771?v=4&s=24) Stable AI](https://github.com/limix-ldm-ai) | Models joint distributions over table variables and missingness. | [Preprint](https://arxiv.org/abs/2509.03505) | [GitHub](https://github.com/limix-ldm-ai/LimiX) · [Hugging Face](https://huggingface.co/stable-ai/LimiX-1_16M) |
+| 2025-11-11 | [TabPFN-2.5](https://github.com/PriorLabs/TabPFN) · [![Prior Labs logo](https://avatars.githubusercontent.com/u/144344393?v=4&s=24) Prior Labs](https://priorlabs.ai/) | Expands table size and adds distillation into smaller predictors. | [Preprint](https://arxiv.org/abs/2511.08667) | [GitHub](https://github.com/PriorLabs/TabPFN) · [Hugging Face](https://huggingface.co/Prior-Labs/tabpfn_2_5) |
+| 2026-02-11 | [TabICLv2](https://github.com/soda-inria/tabicl) · [![Inria logo](https://avatars.githubusercontent.com/u/98714838?v=4&s=24) Inria](https://github.com/soda-inria) | Adds regression and revises synthetic priors, attention, and pretraining. | [Preprint](https://arxiv.org/abs/2602.11139) | [GitHub](https://github.com/soda-inria/tabicl) · [Hugging Face](https://huggingface.co/jingang/TabICL) |
+| 2026-05-13 | [TabPFN-3](https://docs.priorlabs.ai/changelog/tabpfn-3) · [![Prior Labs logo](https://avatars.githubusercontent.com/u/144344393?v=4&s=24) Prior Labs](https://priorlabs.ai/) | Scales in-context prediction to million-row datasets. | [Preprint](https://arxiv.org/abs/2605.13986) | [GitHub](https://github.com/PriorLabs/TabPFN) · [Hugging Face](https://huggingface.co/Prior-Labs/tabpfn_3) |
+| 2026-06-12 | [Nori](https://github.com/Synthefy/synthefy-nori) · [![Synthefy logo](https://avatars.githubusercontent.com/u/140136711?v=4&s=24) Synthefy](https://www.synthefy.com/) | Synthetic-data pretraining for in-context regression with quantile predictions. | [Release announcement](https://www.synthefy.com/blog/synthefy-tabular-release) | [GitHub](https://github.com/Synthefy/synthefy-nori) · [Hugging Face](https://huggingface.co/Synthefy/Nori) |
+| 2026-06-30 | [TabFM](https://research.google/blog/introducing-tabfm-a-zero-shot-foundation-model-for-tabular-data/) · [![Google Research logo](https://avatars.githubusercontent.com/u/43830688?v=4&s=24) Google Research](https://research.google/) | Google's synthetic-data model for in-context classification and regression. | [Announcement](https://research.google/blog/introducing-tabfm-a-zero-shot-foundation-model-for-tabular-data/) | [Project](https://research.google/blog/introducing-tabfm-a-zero-shot-foundation-model-for-tabular-data/) |
+| 2026-09-15 | [TabPFN-3.5](https://github.com/PriorLabs/TabPFN) · [![Prior Labs logo](https://avatars.githubusercontent.com/u/144344393?v=4&s=24) Prior Labs](https://priorlabs.ai/) | Extends evaluation and capabilities to temporal, grouped, and mixed-modality tables. | [Release announcement](https://priorlabs.ai/technical-reports/tabpfn-3-5) | [GitHub](https://github.com/PriorLabs/TabPFN) · [Hugging Face](https://huggingface.co/Prior-Labs/tabpfn_3_5) |
+| 2026-09-29 | [Kumo Tabular](https://github.com/NVIDIA/structured-data-models) · [![NVIDIA logo](https://avatars.githubusercontent.com/u/1728152?v=4&s=24) NVIDIA](https://github.com/NVIDIA) | Synthetic-data pretraining with column, row, and in-context attention for classification and regression. | [Release announcement](https://huggingface.co/blog/nvidia/kumo-tabular) | [GitHub](https://github.com/NVIDIA/structured-data-models) · [Hugging Face](https://huggingface.co/nvidia/Kumo-Tabular) |
 
-| File | Responsibility |
+
+## Use the interactive guide
+
+Open the [guide](https://affirm.github.io/tabular-foundation-models-tutorial/) in a modern browser. Follow the sequence from tabular prediction and adaptation through PFN theory, TabICLv2 training, and inference. Then try the browser playground and inspect the model's intermediate computations. Basic supervised learning is enough to get started.
+
+TabICLv2 is the worked example. The guide distinguishes explanatory simulations from real model execution; browser inference runs locally. For a Python exercise, use the [notebook](materials/notebooks/01_tabicl_primer.ipynb) or [open it in Colab](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb). [Setup instructions](materials/README.md) cover the notebook environment.
+
+## Tutorials and learning resources
+
+| Resource | What to learn |
 | --- | --- |
-| `materials/website/js/site.js` | Scroll reveals, outline navigation, table and boosting demos, PFN episode, architecture flows, and responsive canvas drawing. |
-| `materials/website/js/hero3d.js` | Three.js hero scene, drag rotation, frame limiting, and viewport-based pause behavior. |
-| `materials/website/js/playground.js` | Shared datasets, synchronized 2×2 canvases, query interaction, and orchestration across both workers. |
-| `materials/website/js/playground3d.js` | Pure perspective projection, probability-color, slice-interpolation, and attention-ranking helpers for the playground. |
-| `materials/website/js/classical-models.js` | Logistic regression and depth-limited CART fit/predict implementations. |
-| `materials/website/js/classical-worker.js` | Fits and evaluates logistic, tree, and kNN fields off the main thread. |
-| `materials/website/js/tabicl/worker.js` | Fetches upstream checkpoint assets and executes the browser port away from the main UI thread. |
-| `materials/website/js/tabicl/nanotabicl.js` | Legacy selected-view bridge used only by the Svelte explorer. |
-| `materials/tabicl-explainer/src/lib/tabicl.ts` | Connects the Svelte explorer to the shared runtime and model assets. |
+| [Tabular Foundation Models, Christoph Molnar](https://tabularfoundationmodels.com/) | An online book covering PFNs, in-context learning, pretraining, and practical prediction examples. |
+| [TabPFN documentation](https://docs.priorlabs.ai/) | Official quickstarts and examples for applying TabPFN to classification and regression. |
+| [TabICL documentation](https://tabicl.readthedocs.io/en/latest/) | Official usage instructions, configuration, and API reference. |
+| [nanoTabPFN](https://github.com/automl/nanoTabPFN) | A small educational implementation for studying the model and training loop. |
+| [nanoTabICL](https://github.com/soda-inria/nanotabicl) | A compact implementation of the TabICLv2 architecture and a simplified synthetic-data prior. |
+| [Transformer Explainer](https://poloclub.github.io/transformer-explainer/) | An interactive introduction to attention and transformer computation, using a language model. |
 
-## Folder layout
+For a conceptual introduction, start with Molnar's book. To run a model on your own table, use the official documentation. To study how it is built, read the nano implementations alongside the papers below.
 
-```text
-tabular-foundation-models-tutorial/
-├── .github/workflows/
-│   ├── notebook.yml
-│   └── pages.yml
-├── LICENSE
-├── LICENSE-CONTENT
-├── NOTICE
-├── THIRD_PARTY_NOTICES
-├── README.md
-├── materials/
-│   ├── README.md                   # archive setup instructions
-│   ├── LICENSE                     # Apache 2.0 for original code
-│   ├── LICENSE-CONTENT             # CC BY 4.0 for original teaching content
-│   ├── NOTICE
-│   ├── THIRD_PARTY_NOTICES
-│   ├── requirements.txt
-│   ├── requirements-lock.txt       # hashed Python 3.11 transitive lock
-│   ├── notebooks/                  # self-guided TabICLv2 primer
-│   ├── website/
-│   │   ├── index.html
-│   │   ├── css/main.css
-│   │   ├── js/
-│   │   ├── model/
-│   │   └── tabicl-explainer/       # generated by the Svelte build
-│   └── tabicl-explainer/           # Svelte source
-└── tests/                           # promoted runtime and visualization tests
-```
+## Papers and model implementations
 
-Virtual environments, dependency folders, local caches, and generated Svelte output are ignored
-by Git.
+These are selected entry points into PFN-based tabular prediction. Follow each project's documentation for available checkpoints, supported tasks, and terms of use.
 
-## Run locally
+| Topic | Paper | Code and documentation |
+| --- | --- | --- |
+| PFN foundations | [Transformers Can Do Bayesian Inference](https://arxiv.org/abs/2112.10510) | [PFNs](https://github.com/SamuelGabriel/PFNs) |
+| TabPFN | [TabPFN-3 technical report](https://arxiv.org/abs/2605.13986) | [Official code](https://github.com/PriorLabs/TabPFN) · [Documentation and model access](https://docs.priorlabs.ai/) |
+| TabICL | [TabICLv2 paper](https://arxiv.org/abs/2602.11139) | [Official code and checkpoints](https://github.com/soda-inria/tabicl) · [Documentation](https://tabicl.readthedocs.io/en/latest/) |
 
-Requirements:
+## Benchmarks and evaluation
 
-- Node.js 20 or newer
-- npm 10 or newer
-- Python 3 for the static HTTP server
+| Resource | What it offers | Sources |
+| --- | --- | --- |
+| TabArena | A maintained benchmark for comparing tabular models under documented evaluation settings. | [Paper](https://arxiv.org/abs/2506.16791) · [Code](https://github.com/autogluon/tabarena) · [Datasets](https://github.com/tabarena/data-foundry) · [Leaderboard](https://tabarena.ai/) |
+| TALENT | A toolkit for comparing classical and deep tabular methods, with datasets and preprocessing options. | [Paper](https://www.jmlr.org/papers/v26/25-0512.html) · [Code and datasets](https://github.com/LAMDA-Tabular/TALENT) |
+| TabZilla | An empirical study of when neural networks and boosted trees perform well on tabular data. | [Paper](https://arxiv.org/abs/2305.02997) · [Code and datasets](https://github.com/naszilla/tabzilla) |
 
-From this project folder:
+Read results with their dataset splits, tuning budgets, and ensembling settings. Scores from separate papers do not form a single ranking. Use these resources to choose an evaluation protocol and baselines for your own task.
+
+## Run this guide locally
+
+Requires Node.js 20+, npm 10+, and Python 3. From the repository root:
 
 ```bash
-# Build the standalone Svelte explorer into materials/website/tabicl-explainer
 cd materials/tabicl-explainer
 npm ci
 npm run build
-
-# Serve the complete website
 cd ../website
 ./serve.sh 8000
 ```
 
-Open http://localhost:8000/. Do not open `index.html` with `file://`; ES module
-workers and sibling model assets require HTTP.
+Open [localhost:8000](http://localhost:8000/). Serve over HTTP so that module workers and model assets load correctly.
 
-To work only on the Svelte explorer:
+## Attribution and license
 
-```bash
-cd materials/tabicl-explainer
-npm run dev
-```
+[Browser model provenance](materials/website/model/PROVENANCE.md) documents the checkpoint and export. The [explorer README](materials/tabicl-explainer/README.md) credits the adaptation of Transformer Explainer.
 
-The Vite plugin serves the sibling checkpoint at `/model/` during development.
-
-## Verification
-
-```bash
-# Check the plain JavaScript entry points and workers
-for file in materials/website/js/{site,hero3d,knn,playground,playground3d,classical-models,classical-worker}.js \
-  materials/website/js/tabicl/{worker,classifier,core,browser-core}.js; do
-  node --check "$file"
-done
-
-# Check all browser-model and visualization tests
-node --test tests/*.test.mjs
-
-# Confirm the standalone explorer builds
-cd materials/tabicl-explainer
-npm run build
-cd ../..
-```
-
-## Deployment
-
-`.github/workflows/pages.yml` deploys the site when website or
-Svelte source files reach `main`.
-
-1. CI installs the Svelte dependencies.
-2. SvelteKit writes relative assets to `materials/website/tabicl-explainer/`.
-3. GitHub uploads `materials/website/` as the Pages root.
-4. The browser resolves the shared model from `materials/website/model/`.
-
-The generated Svelte output is intentionally ignored because CI rebuilds it. GitHub
-Pages may briefly serve a cached `css/main.css` after deployment. A cache-bypass reload
-loads the current stylesheet.
-
-## Model and visual provenance
-
-- Browser checkpoint details: [`materials/website/model/PROVENANCE.md`](materials/website/model/PROVENANCE.md)
-- Transformer Explainer adaptation and citation: [`materials/tabicl-explainer/README.md`](materials/tabicl-explainer/README.md)
-- Adapted interface license: [`materials/tabicl-explainer/LICENSE`](materials/tabicl-explainer/LICENSE)
-
-TabICL, nanoTabICL, Three.js, datasets, and model checkpoints retain their upstream
-terms. The reference collection in the website links each model to its primary source.
-
-## License
-
-Unless otherwise noted, original software and code are licensed under the
-[Apache License, Version 2.0](LICENSE), and original educational content is licensed under
-[Creative Commons Attribution 4.0 International](LICENSE-CONTENT). Copyright (c) 2026,
-Affirm, Inc. All rights reserved. See [NOTICE](NOTICE) for the project notice and
-[THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES) for the separate terms and attributions that apply
-to third-party software, model artifacts, adapted materials, and data.
-
-## Related work
-
-- [TabArena](https://arxiv.org/abs/2506.16791), TabPFN, TabICL, and related benchmarks are cited in the website.
+Unless otherwise noted, original software and code are licensed under the [Apache License, Version 2.0](LICENSE), and original educational content is licensed under [Creative Commons Attribution 4.0 International](LICENSE-CONTENT). Copyright (c) 2026, Affirm, Inc. All rights reserved. See [NOTICE](NOTICE) for the project notice and [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES) for the separate terms and attributions that apply to third-party software, model artifacts, adapted materials, and data.
