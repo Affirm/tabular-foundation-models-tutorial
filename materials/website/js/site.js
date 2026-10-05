@@ -1389,16 +1389,18 @@ function createTensorScene(canvas, render) {
     }
   }
 
-  function datasetAttention(x, y, labels = null, showOutput = true) {
-    const queryY = y + 9 * 31;
+  function datasetAttention(x, y, labels = null) {
+    // Show the final block explicitly. C′ and Q′ have already passed through
+    // blocks 1–11, where both context and query read context K/V only.
+    const queryY = y + 9 * 27;
     for (let row = 0; row < 10; row++) {
-      const cy = y + row * 31;
+      const cy = y + row * 27;
       ctx.fillStyle = row === 9 ? "rgba(255,132,108,.28)" : "rgba(154,124,255,.24)";
       ctx.strokeStyle = row === 9 ? TECH.coral : TECH.violet;
       ctx.fillRect(x, cy, 72, 20);
       ctx.strokeRect(x, cy, 72, 20);
       const label = labels?.[row] ?? row % 2;
-      mono(row === 9 ? "Q · y=?" : `C${row + 1} · y=${label}`, x + 36, cy + 10, 10,
+      mono(row === 9 ? "Q′ · no y" : `C${row + 1}′ · y=${label}`, x + 36, cy + 10, 10,
         row === 9 ? TECH.coral : TECH.text, "center", 650);
       if (row < 9) {
         arrow(x + 76, cy + 10, x + 150, queryY + 10, "rgba(53,217,255,.52)", 1);
@@ -1410,19 +1412,12 @@ function createTensorScene(canvas, render) {
     ctx.arc(x + 166, queryY + 10, 15, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-    text("Q", x + 166, queryY + 10, 13, TECH.coral, "center", 750);
-    if (showOutput) {
-      arrow(x + 183, queryY + 10, x + 222, queryY + 10, TECH.coral, 1.5);
-      cube(x + 228, queryY - 18, 66, 55, 10, "head", "1×10", TECH.coral);
-      arrow(x + 306, queryY + 10, x + 336, queryY + 10, TECH.gold, 1.5);
-      ctx.fillStyle = "rgba(255,209,102,.22)";
-      ctx.strokeStyle = TECH.gold;
-      ctx.fillRect(x + 342, queryY - 17, 55, 23);
-      ctx.fillRect(x + 342, queryY + 13, 34, 23);
-      ctx.strokeRect(x + 342, queryY - 17, 55, 23);
-      ctx.strokeRect(x + 342, queryY + 13, 34, 23);
-      mono("2 classes", x + 370, queryY + 52, 11, TECH.gold, "center", 700);
-    }
+    text("Q″", x + 166, queryY + 10, 13, TECH.coral, "center", 750);
+    // The query's own representation participates in attention and residuals.
+    // Its label is absent, but its features must not disappear from the graph.
+    arrow(x + 76, queryY + 10, x + 149, queryY + 10, TECH.coral, 1.5);
+    mono("block 12 shown · query output retained", x + 115, queryY + 37, 9, TECH.muted, "center", 700);
+    return { outputX: x + 183, outputY: queryY + 10 };
   }
 
   function background() {
@@ -1541,17 +1536,28 @@ function initTrainingLive() {
       arrow(635, 267, 662, 267, TECH.violet, 2);
       panel(669, 82, 271, 372, TECH.coral);
       mono("3 · DATASET ICL ATTENTION", 687, 104, 12, TECH.coral, "left", 700);
-      mono("11 blocks: C,Q read C · final: Q reads C", 687, 124, 9, TECH.muted);
-      datasetAttention(692, 146, y, false);
-      arrow(875, 435, 898, 435, TECH.coral, 1.4);
-      mono("LN→MLP→1×10", 934, 450, 9, TECH.gold, "right", 700);
+      mono("before block 1: C += y_embed_icl · Q has no y", 687, 124, 9, TECH.coral);
+      mono("blocks 1–11: C,Q read C K/V → C′,Q′", 687, 144, 9, TECH.muted);
+      const iclOutput = datasetAttention(692, 163, y);
+      arrow(iclOutput.outputX, iclOutput.outputY, 925, iclOutput.outputY, TECH.coral, 1.4);
+      mono("LN + MLP", 906, 395, 8, TECH.gold, "center", 700);
+      mono("1×10", 906, 432, 9, TECH.gold, "center", 700);
     } else if (active === 2) {
       title("Step 03 · query loss", "The toy query contributes 10-way cross-entropy", "illustrative values · training only");
       panel(72, 115, 260, 240, TECH.coral);
       mono("HIDDEN TRUTH", 202, 144, 12, TECH.coral, "center", 700);
       text(`query y = ${y[9]}`, 202, 218, 30, TECH.text, "center", 800);
       mono("query label never enters forward pass", 202, 319, 11, TECH.muted, "center");
-      arrow(350, 235, 405, 235, TECH.coral, 2);
+      // The hidden label is a loss target, never an input to the output head.
+      ctx.strokeStyle = TECH.coral;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(202, 355);
+      ctx.lineTo(202, 382);
+      ctx.lineTo(841, 382);
+      ctx.stroke();
+      arrow(841, 382, 841, 357, TECH.coral, 1.5);
+      mono("hidden target → loss only", 490, 370, 11, TECH.coral, "center", 700);
       panel(426, 115, 250, 240, TECH.cyan);
       mono("ILLUSTRATIVE OUTPUT", 551, 144, 12, TECH.cyan, "center", 700);
       cube(492, 181, 118, 82, 15, "LN + MLP", "1×10 logits", TECH.cyan);
@@ -1673,8 +1679,16 @@ function initInferenceLive() {
     } else {
       title("Stage 04 · dataset ICL + output", "Twelve ICL blocks turn context into query logits", "no loss · no backward · no update");
       panel(49, 90, 474, 356, TECH.coral);
-      mono("C += y_embed_icl · Q has no y · K/V = context only", 286, 116, 10, TECH.coral, "center", 700);
-      datasetAttention(82, 139, y, false);
+      mono("before block 1: C += y_embed_icl · Q has no y", 286, 116, 10, TECH.coral, "center", 700);
+      mono("blocks 1–11: C,Q read C K/V → C′,Q′", 286, 140, 10, TECH.muted, "center", 700);
+      const iclOutput = datasetAttention(82, 159, y);
+      v.ctx.strokeStyle = TECH.coral;
+      v.ctx.lineWidth = 1.5;
+      v.ctx.beginPath();
+      v.ctx.moveTo(iclOutput.outputX, iclOutput.outputY);
+      v.ctx.lineTo(550, iclOutput.outputY);
+      v.ctx.lineTo(550, 268);
+      v.ctx.stroke();
       arrow(550, 268, 603, 268, TECH.coral, 2);
       panel(628, 134, 268, 270, TECH.gold);
       mono("FROZEN OUTPUT HEAD", 762, 163, 12, TECH.gold, "center", 700);

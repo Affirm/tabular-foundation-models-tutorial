@@ -1068,8 +1068,8 @@
         </div>
         <div class="prose reveal">
           <p>
-            Inference repeats the same preprocessing and 3-column / 3-row / 12-ICL-block
-            forward graph, but stops after prediction. Context labels are embedded; the query
+            In this classifier-core schematic, inference repeats the nanoTabICL preprocessing
+            and 3-column / 3-row / 12-ICL-block forward graph, but stops after prediction. Context labels are embedded; the query
             label is unavailable; pretrained weights remain frozen. There is no loss,
             backpropagation, or task-specific optimizer step in this diagram.
             <a class="cite" href="https://arxiv.org/abs/2602.11139" target="_blank" rel="noopener">[Qu et al., 2026]</a>
@@ -1089,7 +1089,7 @@
             <div>
               <span class="mono">same graph · inference mode · weights frozen</span>
               <h3 id="inference-live-title">Trace the same toy table without an update step</h3>
-              <p>This is a shape-faithful schematic. Select a stage to inspect what is reused from training and what changes at inference.</p>
+              <p>This schematic shows the classifier core. The full browser classifier additionally preprocesses and ensembles eight views. Select a stage to inspect the core data flow.</p>
             </div>
           </header>
           <nav class="inference-live__steps architecture-flow" aria-label="Inference architecture stages">
