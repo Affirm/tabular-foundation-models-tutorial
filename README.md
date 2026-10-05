@@ -1,6 +1,6 @@
 # Tabular Foundation Models Tutorial
 
-[Interactive website](https://affirm.github.io/tabular-foundation-models-tutorial/) · [Python notebook](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb) · [Model landscape](#model-landscape) · [Learning resources](#tutorials-and-learning-resources)
+[Interactive website](https://affirm.github.io/tabular-foundation-models-tutorial/) · [Python notebook](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb) · [Our guide](#our-interactive-guide) · [Model landscape](#model-landscape) · [Learning resources](#tutorials-and-learning-resources) · [Conference resources](#conference-and-workshop-resources)
 
 Table as Prompt: An Interactive Guide to Tabular Foundation Models - accepted for presentation at the [NeurIPS 2026 Education Track](https://neurips.cc/Conferences/2026/CallforEducationalResources). [Read the paper (PDF, submission version)](materials/website/paper.pdf).
 
@@ -13,6 +13,12 @@ Tabular foundation models (TFMs) are pretrained predictors designed for reuse ac
 [Prior-data fitted networks (PFNs)](https://arxiv.org/abs/2112.10510) learn from tasks sampled from a prior. During pretraining, the model predicts held-out query labels from context rows. The task distribution and expected query loss shape its learned inductive bias. [TabPFN](https://arxiv.org/abs/2207.01848) demonstrated this approach for small tabular classification tasks. Our guide uses [TabICLv2](https://arxiv.org/abs/2602.11139) as a worked example; its architecture and inference procedure are model-specific, not shared by every TFM.
 
 The broader goal is reusable prediction for structured data. The field now covers classification and regression across different table sizes, with open questions about robustness, scale, efficiency, and evaluation. Strong task-specific methods, including boosted trees, remain baselines for assessing where these models help.
+
+## Our interactive guide
+
+Open the [guide](https://affirm.github.io/tabular-foundation-models-tutorial/) in a modern browser. Follow the sequence from tabular prediction and adaptation through PFN theory, TabICLv2 training, and inference. Then try the browser playground and inspect the model's intermediate computations. Basic supervised learning is enough to get started.
+
+TabICLv2 is the worked example. The guide distinguishes explanatory simulations from real model execution; browser inference runs locally. For a Python exercise, use the [notebook](materials/notebooks/01_tabicl_primer.ipynb) or [open it in Colab](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb). [Setup instructions](materials/README.md) cover the notebook environment.
 
 ## Model landscape
 
@@ -39,11 +45,12 @@ Selected milestones through October 4, 2026. Each date links to a primary source
 | 2026-09-29 | [Kumo Tabular](https://github.com/NVIDIA/structured-data-models) · [![NVIDIA logo](https://avatars.githubusercontent.com/u/1728152?v=4&s=24) NVIDIA](https://github.com/NVIDIA) | Synthetic-data pretraining with column, row, and in-context attention for classification and regression. | [Release announcement](https://huggingface.co/blog/nvidia/kumo-tabular) | [GitHub](https://github.com/NVIDIA/structured-data-models) · [Hugging Face](https://huggingface.co/nvidia/Kumo-Tabular) |
 
 
-## Use the interactive guide
+## Conference and workshop resources
 
-Open the [guide](https://affirm.github.io/tabular-foundation-models-tutorial/) in a modern browser. Follow the sequence from tabular prediction and adaptation through PFN theory, TabICLv2 training, and inference. Then try the browser playground and inspect the model's intermediate computations. Basic supervised learning is enough to get started.
-
-TabICLv2 is the worked example. The guide distinguishes explanatory simulations from real model execution; browser inference runs locally. For a Python exercise, use the [notebook](materials/notebooks/01_tabicl_primer.ipynb) or [open it in Colab](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb). [Setup instructions](materials/README.md) cover the notebook environment.
+| Collection | What to explore |
+| --- | --- |
+| [NeurIPS 2026 resources](resources/neurips.md) | Our Education Track guide, selected 2026 model and benchmark papers, and code. |
+| [FMSD 2026 workshop](https://openreview.net/group?id=ICML.cc/2026/Workshop/FMSD#tab-your-consoles) | OpenReview page for the ICML workshop on Foundation Models for Structured Data. |
 
 ## Tutorials and learning resources
 
@@ -70,9 +77,14 @@ These are selected entry points into PFN-based tabular prediction. Follow each p
 
 ## Benchmarks and evaluation
 
+Choose a benchmark for the capability you need to evaluate: predictive accuracy, generalization across data regimes, probabilistic predictions, or multimodal inputs.
+
 | Resource | What it offers | Sources |
 | --- | --- | --- |
 | TabArena | A maintained benchmark for comparing tabular models under documented evaluation settings. | [Paper](https://arxiv.org/abs/2506.16791) · [Code](https://github.com/autogluon/tabarena) · [Datasets](https://github.com/tabarena/data-foundry) · [Leaderboard](https://tabarena.ai/) |
+| BeyondArena | Generalization across IID, temporal, and grouped tasks, table sizes, and feature types. | [Paper](https://arxiv.org/abs/2606.30410) · [Code](https://github.com/autogluon/tabarena) · [Data Foundry](https://github.com/tabarena/data-foundry) |
+| ScoringBench | Probabilistic regression evaluated with proper scoring rules, including CRPS and interval scores, alongside point-prediction metrics. | [Paper](https://arxiv.org/abs/2603.29928) · [Code and data setup](https://github.com/jonaslandsgesell/ScoringBench) · [Leaderboard](https://scoringbench.com/) |
+| MulTaBench | Multimodal tabular learning with text and image inputs. | [Paper](https://arxiv.org/abs/2605.10616) · [Code and datasets](https://github.com/alanarazi7/MulTaBench) |
 | TALENT | A toolkit for comparing classical and deep tabular methods, with datasets and preprocessing options. | [Paper](https://www.jmlr.org/papers/v26/25-0512.html) · [Code and datasets](https://github.com/LAMDA-Tabular/TALENT) |
 | TabZilla | An empirical study of when neural networks and boosted trees perform well on tabular data. | [Paper](https://arxiv.org/abs/2305.02997) · [Code and datasets](https://github.com/naszilla/tabzilla) |
 
