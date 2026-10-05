@@ -36,22 +36,25 @@
 	const DESIGN_WIDTH = 1880;
 	let fitScale = 1;
 	let designHeight = 900;
+	let inspectionRequest = 0;
 
 	$: query = QUERIES.find((item) => item.id === selectedQuery) ?? QUERIES[0];
 	$: selectedAttention = inspection?.iclBlocks[iclBlock]?.attention ?? null;
 	$: selectedColumn = inspection?.columnBlocks[columnBlock]?.activation ?? null;
 	$: selectedRow = inspection?.rowBlocks[rowBlock]?.tokens ?? null;
-	$: revision = `${selectedQuery}-${columnBlock}-${rowBlock}-${iclBlock}-${attentionHead}-${loadStatus.phase}`;
+	$: revision = `${selectedQuery}-${columnBlock}-${rowBlock}-${iclBlock}-${attentionHead}-${loadStatus.phase}-${guidePage}-${textbookOpen}-${fitScale}`;
 
 	async function runInspection(activeModel: TabICLModel, activeCache: unknown, queryId: string) {
+		const request = ++inspectionRequest;
 		const selected = QUERIES.find((item) => item.id === queryId) ?? QUERIES[0];
 		inspection = null;
 		loadStatus = { phase: 'running', progress: 0.98, message: `Running real Query ${queryId}` };
 		await tick();
 		await new Promise((resolve) => setTimeout(resolve, 20));
+		if (request !== inspectionRequest) return;
 		try {
 			inspection = activeModel.inspectQuery(activeCache, [...selected.x], 3);
-			loadStatus = { phase: 'ready', progress: 1, message: 'nanoTabICL trace ready' };
+			loadStatus = { phase: 'ready', progress: 1, message: 'TabICLv2 core trace ready' };
 		} catch (error) {
 			loadStatus = {
 				phase: 'error',
@@ -99,9 +102,9 @@
 		return `rgb(${target.map((channel) => Math.round(255 + (channel - 255) * amount)).join(',')})`;
 	}
 
-	function stageClass(page: number) {
-		if (!textbookOpen || guidePage === 0) return '';
-		return guidePage === page ? 'spotlit' : 'muted';
+	function stageClass(page: number, activePage: number, open: boolean) {
+		if (!open || activePage === 0) return '';
+		return activePage === page ? 'spotlit' : 'muted';
 	}
 
 	function cycle(value: number, delta: number, length: number) {
@@ -113,7 +116,7 @@
 	<title>TabICL Explainer: Tabular In-Context Learning, Visually Explained</title>
 	<meta
 		name="description"
-		content="An educational nanoTabICL visualization using mapped official TabICLv2 classifier weights and Iris data."
+		content="A single-pass TabICLv2 core inspector using quantized official classifier weights and Iris data."
 	/>
 </svelte:head>
 
@@ -128,7 +131,7 @@
 		<div class="architecture resize-watch">
 			<Sankey {revision} />
 
-			<section class={`stage raw-stage ${stageClass(1)}`}>
+			<section class={`stage raw-stage ${stageClass(1, guidePage, textbookOpen)}`}>
 				<div class="stage-title">IRIS TABLE</div>
 				<div class="stage-subtitle">real UCI records · cm</div>
 				<div class="table-card" data-flow-node>
@@ -153,7 +156,7 @@
 				<div class="truth-note">Query {selectedQuery} is visibly unlabeled</div>
 			</section>
 
-			<section class={`stage preprocess-stage ${stageClass(2)}`}>
+			<section class={`stage preprocess-stage ${stageClass(2, guidePage, textbookOpen)}`}>
 				<div class="stage-title">PREPROCESS + EMBED</div>
 				<div class="stage-subtitle">live query path</div>
 				<div class="preprocess-flow" data-flow-node>
@@ -172,13 +175,13 @@
 					<div class="operation">
 						<span>W<sub>x</sub></span>
 						<b>Linear embed</b>
-						<small>4 × 128</small>
+						<small>output: 4 groups × 128</small>
 					</div>
 					<div class="activation-label">LIVE TENSOR SAMPLE</div>
 					<div class="column-strips">
 						{#each inspection?.embedding.values ?? Array(4).fill(Array(24).fill(Number.NaN)) as values, index}
 							<div class="strip-row">
-								<span class="strip-label">f{index + 1}</span>
+								<span class="strip-label">g{index + 1}</span>
 								<div class="heat-strip">
 									{#each values as value}
 										<i
@@ -193,7 +196,7 @@
 				</div>
 			</section>
 
-			<section class={`stage column-stage ${stageClass(3)}`}>
+			<section class={`stage column-stage ${stageClass(3, guidePage, textbookOpen)}`}>
 				<div class="stage-title">COLUMN TRANSFORMER</div>
 				<div class="stage-subtitle">induced attention · 8 heads</div>
 				<div class="block-stack" data-flow-node>
@@ -202,9 +205,9 @@
 					{/each}
 					<div class="block-card">
 						<div class="pager">
-							<button on:click={() => (columnBlock = cycle(columnBlock, -1, 3))}>‹</button>
+							<button aria-label="Previous column block" on:click={() => (columnBlock = cycle(columnBlock, -1, 3))}>‹</button>
 							<span>Block {columnBlock + 1} of 3</span>
-							<button on:click={() => (columnBlock = cycle(columnBlock, 1, 3))}>›</button>
+							<button aria-label="Next column block" on:click={() => (columnBlock = cycle(columnBlock, 1, 3))}>›</button>
 						</div>
 						<div class="inducing">128 inducing vectors</div>
 						<div class="mini-block"><span>TFM 1</span><small>QASSMax</small></div>
@@ -213,7 +216,7 @@
 						<div class="column-strips live">
 							{#each selectedColumn?.values ?? Array(4).fill(Array(24).fill(Number.NaN)) as values, index}
 								<div class="strip-row">
-									<span class="strip-label">f{index + 1}</span>
+									<span class="strip-label">g{index + 1}</span>
 									<div class="heat-strip">
 										{#each values as value}
 											<i
@@ -230,18 +233,18 @@
 				</div>
 			</section>
 
-			<section class={`stage row-stage ${stageClass(4)}`}>
+			<section class={`stage row-stage ${stageClass(4, guidePage, textbookOpen)}`}>
 				<div class="stage-title">ROW TRANSFORMER</div>
 				<div class="stage-subtitle">feature mixing + CLS compression</div>
 				<div class="row-card" data-flow-node>
 					<div class="pager">
-						<button on:click={() => (rowBlock = cycle(rowBlock, -1, 3))}>‹</button>
+						<button aria-label="Previous row block" on:click={() => (rowBlock = cycle(rowBlock, -1, 3))}>‹</button>
 						<span>Block {rowBlock + 1} of 3</span>
-						<button on:click={() => (rowBlock = cycle(rowBlock, 1, 3))}>›</button>
+						<button aria-label="Next row block" on:click={() => (rowBlock = cycle(rowBlock, 1, 3))}>›</button>
 					</div>
 					<div class="token-set">
 						{#each Array(4) as _, index}<div class="cls">CLS {index + 1}</div>{/each}
-						{#each Array(rowBlock === 2 ? 0 : 4) as _, index}<div class="feature-token">f{index + 1}</div>{/each}
+						{#each Array(rowBlock === 2 ? 0 : 4) as _, index}<div class="feature-token">g{index + 1}</div>{/each}
 					</div>
 					<div class="row-attention">8-head self-attention + MLP</div>
 					<div class="selected-token-strip">
@@ -256,7 +259,7 @@
 				</div>
 			</section>
 
-			<section class={`stage vectors-stage ${stageClass(4)}`}>
+			<section class={`stage vectors-stage ${stageClass(4, guidePage, textbookOpen)}`}>
 				<div class="stage-title">ROW VECTORS</div>
 				<div class="stage-subtitle">4 CLS × 128 → 512</div>
 				<div class="vector-column" data-flow-node>
@@ -280,7 +283,7 @@
 				</div>
 			</section>
 
-			<section class={`stage icl-stage ${stageClass(5)}`}>
+			<section class={`stage icl-stage ${stageClass(5, guidePage, textbookOpen)}`}>
 				<div class="stage-title">ICL TRANSFORMER × 12</div>
 				<div class="stage-subtitle">query-to-context routing</div>
 				<div class="icl-stack" data-flow-node>
@@ -290,14 +293,14 @@
 					<div class="icl-card">
 						<div class="dual-pager">
 							<div class="pager">
-								<button on:click={() => (iclBlock = cycle(iclBlock, -1, 12))}>‹</button>
+								<button aria-label="Previous ICL block" on:click={() => (iclBlock = cycle(iclBlock, -1, 12))}>‹</button>
 								<span>Block {iclBlock + 1} / 12</span>
-								<button on:click={() => (iclBlock = cycle(iclBlock, 1, 12))}>›</button>
+								<button aria-label="Next ICL block" on:click={() => (iclBlock = cycle(iclBlock, 1, 12))}>›</button>
 							</div>
 							<div class="pager">
-								<button on:click={() => (attentionHead = cycle(attentionHead, -1, 8))}>‹</button>
+								<button aria-label="Previous attention head" on:click={() => (attentionHead = cycle(attentionHead, -1, 8))}>‹</button>
 								<span>Head {attentionHead + 1} / 8</span>
-								<button on:click={() => (attentionHead = cycle(attentionHead, 1, 8))}>›</button>
+								<button aria-label="Next attention head" on:click={() => (attentionHead = cycle(attentionHead, 1, 8))}>›</button>
 							</div>
 						</div>
 						<AttentionMatrix
@@ -320,9 +323,9 @@
 				</div>
 			</section>
 
-			<section class={`stage output-stage ${stageClass(6)}`}>
+			<section class={`stage output-stage ${stageClass(6, guidePage, textbookOpen)}`}>
 				<div class="stage-title">OUTPUT PROBABILITIES</div>
-				<div class="stage-subtitle">LayerNorm · MLP · softmax</div>
+				<div class="stage-subtitle">single core pass · temperature 1</div>
 				<div class="output-card" data-flow-node>
 					<div class="output-vector"></div>
 					<span class="output-arrow">→</span>
@@ -343,7 +346,7 @@
 	<footer class="provenance">
 		<div>
 			<strong>Model provenance</strong>
-			<span>Mapped official TabICLv2 weights; SHA-256 verified before loading. The 12-row Iris trace is an out-of-regime illustration because the documented pretraining range starts at 300 rows.</span>
+			<span>Quantized official TabICLv2 weights; SHA-256 verified. Fixed single core pass, not the eight-view ensemble. The 12-row context is below the documented pretraining range; this illustrates computation, not model quality.</span>
 		</div>
 	</footer>
 	<Textbook bind:open={textbookOpen} bind:currentPage={guidePage} />

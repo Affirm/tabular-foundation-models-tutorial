@@ -22,7 +22,7 @@ All browser loaders compute the binary SHA-256 with Web Crypto and compare it
 with the manifest before dequantizing or executing the model. A matching byte
 length alone is not accepted.
 
-Each live query prediction uses the same eight-view classifier procedure as the
+Each main-playground query prediction uses the same eight-view classifier procedure as the
 exported package and is parity-checked within the documented quantization tolerances:
 two normalization methods, deterministic Latin
 feature shuffles, shifted class labels, logit averaging, temperature 0.9, and
@@ -35,13 +35,17 @@ The 2D slice and 3D volume are intentionally labeled as a **view 1 preview
 field**. Their `p = 0.5` boundary is computed from view 1 only so interactive
 field generation remains bounded; it is not the final eight-view query output.
 The playground's 20-row context is outside the documented TabICLv2 pretraining
-range of 300 to 48K rows. The upstream FAQ says generalization below 300 rows
-has not been tested, so the displayed result is an out-of-regime illustration.
+range of 300 to 48K rows. The revised paper reports few-shot evaluations below
+300 rows ([Appendix L.3–L.4, September 2026 revision](https://arxiv.org/html/2602.11139v2#A12.SS3)).
+These evaluations do not validate this browser demo as a model-quality benchmark;
+the displayed result is a small-context illustration of computation.
 
 The legacy `../js/tabicl/nanotabicl.js` bridge remains only for the Svelte explainer's
-selected-view core inspection. It adapts the browser manifest's upstream tensor names and keeps
+fixed single-pass core inspection. It adapts the browser manifest's upstream tensor names and keeps
 core input standardization enabled; it does not synthesize values or claim
-ensemble behavior. It follows the released TabICLv2 checkpoint's feature-group
+ensemble behavior. It uses context-only z-score standardization, original feature
+and class order, and softmax temperature 1. It is not one of the eight classifier
+views and does not apply the wrapper's temperature 0.9. It follows the released TabICLv2 checkpoint's feature-group
 offsets `[1, 2, 4]`; the standalone nanoTabICL source uses `[0, 1, 3]`.
 
 This browser scope intentionally excludes regression and classification with

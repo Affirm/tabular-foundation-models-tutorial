@@ -909,6 +909,11 @@ function initScm() {
   taskButton.addEventListener("click", () => addRows(20, true));
   noiseInput.addEventListener("input", () => {
     noiseValue.value = Number(noiseInput.value).toFixed(2);
+    // A new noise scale changes the task distribution; do not mix old rows into it.
+    rows = [];
+    resetTrace();
+    renderRows();
+    resize();
   });
   trace.addEventListener("animationend", () => trace.classList.remove("is-sampling"));
   window.addEventListener("resize", resize);
@@ -927,8 +932,13 @@ function initPfnOverview() {
   const p0Label = $("#pfn-overview-p0-label");
   const p1Label = $("#pfn-overview-p1-label");
   const loss = $("#pfn-overview-loss");
+  const predictionExample = $("#pfn-overview-prediction-example");
+  const lossExample = $("#pfn-overview-loss-example");
+  const revealedTruth = $("#pfn-overview-truth");
+  const discardedTask = $("#pfn-overview-discard");
   const contextLabels = $$(".pfn-episode__rows > span:not(.is-query) em", overview);
-  if (!tasks.length || !taskLabel || !p0Bar || !p1Bar || !p0Label || !p1Label || !loss) return;
+  if (!tasks.length || !taskLabel || !p0Bar || !p1Bar || !p0Label || !p1Label || !loss ||
+      !predictionExample || !lossExample || !revealedTruth || !discardedTask) return;
 
   const episodes = [
     { name: "D¹", p1: 0.63, truth: 1, context: [0, 1, 0, 1, 1] },
@@ -951,6 +961,10 @@ function initPfnOverview() {
     p0Label.value = `${Math.round(p0 * 100)}%`;
     p1Label.value = `${Math.round(episode.p1 * 100)}%`;
     const trueProbability = episode.truth === 1 ? episode.p1 : p0;
+    predictionExample.textContent = `The model assigns ${Math.round(episode.p1 * 100)}% to purchase.`;
+    lossExample.textContent = `The true outcome is ${episode.truth === 1 ? "purchase" : "no purchase"}, so the loss is ${(-Math.log(trueProbability)).toFixed(2)}.`;
+    revealedTruth.textContent = String(episode.truth);
+    discardedTask.textContent = episode.name;
     loss.innerHTML = `y<sub>q</sub> = ${episode.truth}; NLL = −log q<sub>θ</sub>(y<sub>q</sub> = ${episode.truth} | x<sub>q</sub>, D<sub>c</sub>) = −log ${trueProbability.toFixed(2)} = ${(-Math.log(trueProbability)).toFixed(2)}`;
     if (animate && !reduceMotion) {
       overview.classList.remove("is-changing");

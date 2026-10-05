@@ -27,8 +27,7 @@
 		return (value: number) => (Number.isFinite(value) ? scale(value) : '#f3f4f6');
 	};
 
-	$: signedColor = createSignedColor(raw ?? []);
-	$: scaledColor = createSignedColor(scaled ?? []);
+	$: signedColor = createSignedColor([...(raw ?? []), ...(scaled ?? [])]);
 	const weightColor = (value: number) =>
 		Number.isFinite(value) ? d3.interpolateRgb('#ffffff', '#6d28d9')(Math.min(1, value * 4)) : '#f3f4f6';
 </script>
@@ -39,6 +38,7 @@
 	class:expanded
 	on:click={() => (expanded = !expanded)}
 	aria-expanded={expanded}
+	aria-label={expanded ? 'Collapse attention calculation; logits share a color scale' : 'Expand attention calculation'}
 >
 	{#if expanded}
 		<div class="calculation-step">
@@ -48,7 +48,7 @@
 		</div>
 		<span class="arrow">→</span>
 		<div class="calculation-step">
-			<AttentionRow values={scaledValues} colorScale={scaledColor} />
+			<AttentionRow values={scaledValues} colorScale={signedColor} />
 			<div class="matrix-label">QASSMax-scaled logits</div>
 			<code>QASSMax(Q) · Kᵀ / √d</code>
 		</div>

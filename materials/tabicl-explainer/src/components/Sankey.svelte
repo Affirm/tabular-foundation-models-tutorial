@@ -9,16 +9,20 @@
 	const draw = async () => {
 		await tick();
 		if (!svgEl) return;
-		const host = svgEl.parentElement?.getBoundingClientRect();
-		const nodes = Array.from(document.querySelectorAll<HTMLElement>('[data-flow-node]'));
-		if (!host || nodes.length < 2) return;
+		const host = svgEl.parentElement;
+		const matrix = svgEl.getScreenCTM();
+		const nodes = Array.from(host?.querySelectorAll<HTMLElement>('[data-flow-node]') ?? []);
+		if (!matrix || nodes.length < 2) return;
+		// Bounding rectangles use screen coordinates, including the app's CSS scale.
+		// Convert back to SVG coordinates so the scale is applied only once.
+		const inverse = matrix.inverse();
 		const links = nodes.slice(0, -1).map((node, index) => {
 			const source = node.getBoundingClientRect();
 			const target = nodes[index + 1].getBoundingClientRect();
-			const x1 = source.right - host.left;
-			const x2 = target.left - host.left;
-			const y1 = source.top + source.height / 2 - host.top;
-			const y2 = target.top + target.height / 2 - host.top;
+			const start = new DOMPoint(source.right, source.top + source.height / 2).matrixTransform(inverse);
+			const end = new DOMPoint(target.left, target.top + target.height / 2).matrixTransform(inverse);
+			const { x: x1, y: y1 } = start;
+			const { x: x2, y: y2 } = end;
 			const curve = Math.max(20, (x2 - x1) * 0.45);
 			return {
 				path: `M${x1},${y1} C${x1 + curve},${y1} ${x2 - curve},${y2} ${x2},${y2}`,
@@ -38,10 +42,12 @@
 		observer = new ResizeObserver(draw);
 		const host = svgEl.parentElement;
 		if (host) observer.observe(host);
+		host?.addEventListener('transitionend', draw);
 		window.addEventListener('resize', draw);
 		draw();
 		return () => {
 			observer.disconnect();
+			host?.removeEventListener('transitionend', draw);
 			window.removeEventListener('resize', draw);
 		};
 	});

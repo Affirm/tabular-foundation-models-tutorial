@@ -587,7 +587,7 @@
                 </div>
                 <aside class="pfn-step__example">
                   <span class="pfn-card-label mono">concrete example</span>
-                  <strong>The model assigns 63% to purchase.</strong>
+                  <strong id="pfn-overview-prediction-example">The model assigns 63% to purchase.</strong>
                   <p>The visible sessions are not used to fit new weights. They are inputs to this forward pass.</p>
                 </aside>
                 <aside class="pfn-step__intuition">
@@ -616,12 +616,12 @@
                 </div>
                 <div class="pfn-step__mini pfn-update-loop" aria-label="Reveal, update, discard, and repeat">
                   <span class="pfn-card-label mono">mini visual · what survives?</span>
-                  <div><span>reveal <b>1</b></span><i>→</i><span>update <b>θ</b></span><i>→</i><span>discard <s>D¹</s></span></div>
+                  <div><span>reveal <b id="pfn-overview-truth">1</b></span><i>→</i><span>update <b>θ</b></span><i>→</i><span>discard <s id="pfn-overview-discard">D¹</s></span></div>
                   <strong>θ′ continues to the next task</strong>
                 </div>
                 <aside class="pfn-step__example">
                   <span class="pfn-card-label mono">concrete example</span>
-                  <strong>The true outcome is purchase, so the loss is 0.46.</strong>
+                  <strong id="pfn-overview-loss-example">The true outcome is purchase, so the loss is 0.46.</strong>
                   <p>Backpropagation slightly changes <i>θ</i> so future episodes can be predicted better.</p>
                 </aside>
                 <aside class="pfn-step__intuition">
@@ -704,9 +704,9 @@
                 </div>
 
                 <label class="scm-noise" for="scm-noise">
-                  <span><b>Noise strength for future rows</b><output id="scm-noise-value">0.35</output></span>
+                  <span><b>Noise strength</b><output id="scm-noise-value">0.35</output></span>
                   <input id="scm-noise" type="range" min="0" max="1" step="0.05" value="0.35" />
-                  <small>Low noise makes the relationship clearer; high noise makes rows less predictable.</small>
+                  <small>Changing noise clears existing rows so each table uses one noise setting.</small>
                 </label>
               </section>
             </div>
@@ -883,10 +883,10 @@
               </div>
               <p class="model-grid-note">
                 <strong>TFM note:</strong> its boundary is a single-view preview for speed; its
-                displayed probability is the full 8-view ensemble. This 20-row context is an
-                out-of-regime illustration: TabICLv2 was pretrained on 300 to 48K rows, and the
-                official authors have not tested generalization below 300 rows.
-                <a href="https://github.com/soda-inria/tabicl#faq" target="_blank" rel="noopener">See the official FAQ ↗</a>
+                displayed probability is the full 8-view ensemble. This 20-row context is below
+                TabICLv2's documented 300 to 48K-row pretraining range. The revised paper reports
+                few-shot evaluations below 300 rows; this demo illustrates computation, not model quality.
+                <a href="https://arxiv.org/html/2602.11139v2#A12.SS3" target="_blank" rel="noopener">See the paper's few-shot evaluation ↗</a>
               </p>
 
             </div>
@@ -1141,9 +1141,9 @@
         <h2 class="sec__title reveal">Trace a real Iris prediction</h2>
         <div class="prose reveal">
           <p>
-            The embedded explorer runs mapped upstream TabICLv2 classifier weights locally.
+            The embedded explorer runs quantized upstream TabICLv2 classifier weights locally.
             Select a query, follow the context rows through the model, and inspect real
-            selected-view attention and output probabilities.
+            single-pass attention and output probabilities.
           </p>
           <p>
             <strong>Scope:</strong> its 12-row Iris context is deliberately small for tracing and
@@ -1152,9 +1152,10 @@
           </p>
           <p>
             <strong>Implementation note:</strong> The main playground runs the complete
-            eight-view browser classifier. This embedded inspector uses the selected-view
-            nanoTabICL-shaped bridge adapted to the released TabICLv2 checkpoint so its
-            intermediate tensors remain traceable. It is not the standalone nanoTabICL model.
+            eight-view browser classifier. This embedded inspector runs a fixed single core pass through a
+            nanoTabICL-shaped bridge adapted to the released TabICLv2 checkpoint: context-only
+            standardization, original feature and class order, and softmax temperature 1.
+            It is neither a selected ensemble view nor the standalone nanoTabICL model.
           </p>
         </div>
         <aside class="explainer-attribution reveal" aria-label="Interface attribution">

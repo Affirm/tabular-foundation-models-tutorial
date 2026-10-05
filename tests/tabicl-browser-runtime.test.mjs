@@ -118,6 +118,18 @@ test("legacy Svelte bridge inspects the browser manifest without fabricated valu
   assert.equal(trace.output.probabilities.length, 2);
   assert.ok(trace.output.logits.every(Number.isFinite));
   assert.ok(Math.abs(sum(trace.output.probabilities) - 1) < 1e-12);
+  // Instrumenting the core must not change its logits or probability output.
+  assert.deepEqual(trace.output.logits, model.predictQueries(cache, query)[0].slice(0, 2));
+  assert.deepEqual(trace.output.probabilities, model.predictProba(X, y, query, 2)[0]);
+  for (const { attention } of trace.iclBlocks) {
+    for (let head = 0; head < attention.heads.length; head++) {
+      const logits = attention.scaledLogits[head];
+      const exp = logits.map((value) => Math.exp(value - Math.max(...logits)));
+      const total = sum(exp);
+      assert.ok(Math.abs(sum(attention.heads[head]) - 1) < 1e-12);
+      assert.ok(attention.heads[head].every((value, index) => Math.abs(value - exp[index] / total) < 1e-12));
+    }
+  }
   assert.ok(Math.abs(
     trace.input.standardized[0]
     - (query[0][0] - trace.input.mean[0]) / trace.input.std[0],

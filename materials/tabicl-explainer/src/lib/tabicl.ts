@@ -125,7 +125,7 @@ async function fetchWithProgress(
 export async function loadTabICL(
 	onStatus: (status: LoadStatus) => void
 ): Promise<{ model: TabICLModel; cache: unknown }> {
-	onStatus({ phase: 'downloading', progress: 0, message: 'Downloading official TabICLv2 weights' });
+	onStatus({ phase: 'downloading', progress: 0, message: 'Downloading quantized TabICLv2 weights' });
 	const modelBase = new URL('../model/', window.location.href);
 	const manifestResponse = await fetch(new URL('manifest.json', modelBase), { cache: 'no-store' });
 	if (!manifestResponse.ok) throw new Error(`Manifest download failed (${manifestResponse.status})`);
@@ -150,6 +150,6 @@ export async function loadTabICL(
 		CONTEXT.map((row) => [...row.x]),
 		CONTEXT.map((row) => row.y)
 	);
-	onStatus({ phase: 'ready', progress: 1, message: 'nanoTabICL trace ready' });
+	onStatus({ phase: 'ready', progress: 1, message: 'TabICLv2 core trace ready' });
 	return { model, cache };
 }
