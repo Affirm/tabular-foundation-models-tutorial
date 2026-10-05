@@ -49,8 +49,8 @@ Selected milestones through October 4, 2026. Each date links to a primary source
 
 | Collection | What to explore |
 | --- | --- |
-| [NeurIPS 2026 resources](resources/neurips.md) | Our Education Track guide, selected 2026 model and benchmark papers, code, and earlier NeurIPS work. |
-| [FMSD workshop resources](resources/fmsd.md) | Invited talks, selected papers, and research themes from the ICML workshop on Foundation Models for Structured Data. |
+| [NeurIPS 2026 resources](resources/neurips.md) | Our Education Track guide, selected 2026 model and benchmark papers, and code. |
+| [FMSD 2026 workshop resources](resources/fmsd.md) | Invited talks, selected papers, and research themes from the 2026 ICML workshop on Foundation Models for Structured Data. |
 
 ## Tutorials and learning resources
 

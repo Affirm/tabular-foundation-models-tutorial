@@ -1,8 +1,8 @@
 # NeurIPS 2026 resources for tabular foundation models
 
-[Tutorial home](../README.md) · [Interactive guide](https://affirm.github.io/tabular-foundation-models-tutorial/) · [FMSD workshop resources](fmsd.md)
+[Tutorial home](../README.md) · [Interactive guide](https://affirm.github.io/tabular-foundation-models-tutorial/) · [FMSD 2026 workshop resources](fmsd.md)
 
-Start with our interactive guide, then explore selected NeurIPS 2026 work on tabular models, broader prediction tasks, and evaluation. The two 2026 sections below cover papers listed in the [official conference directory](https://neurips.cc/Downloads/2026). Earlier work and related reading are collected separately at the end. Checked October 4, 2026.
+Start with our interactive guide, then explore selected NeurIPS 2026 work on tabular models, broader prediction tasks, and evaluation. The two 2026 sections below cover papers listed in the [official conference directory](https://neurips.cc/Downloads/2026). Checked October 4, 2026.
 
 ## Our guide at NeurIPS 2026
 
@@ -31,29 +31,3 @@ FlexTab's paper announces code and checkpoints, but its linked repository was un
 | Benchmarking Attention for Tabular Foundation Models | Compare attention backends for row and column operations across table shapes and GPU hardware. | [NeurIPS record](https://neurips.cc/virtual/2026/poster/139839) · [Paper](https://arxiv.org/abs/2609.31306) · [Code and results](https://github.com/SAP-samples/tabular-attention-benchmark) |
 
 These papers address different questions: generalization, multimodal inputs, preprocessing, and computational cost. Read their splits, tuning budgets, and hardware settings before comparing results. Strong task-specific baselines remain essential.
-
-## Earlier NeurIPS work: 2025
-
-| Model | What to study | Paper and implementation |
-| --- | --- | --- |
-| TabDPT | Pretraining on real tables and retrieval for inference context. | [Paper](https://www.cs.toronto.edu/~mvolkovs/NeurIPS2025_TabDPT.pdf) · [GitHub](https://github.com/layer6ai-labs/TabDPT-inference) · [Weights](https://huggingface.co/Layer6/TabDPT) |
-| Mitra | How a mixture of synthetic priors shapes classification and regression. | [Paper](https://arxiv.org/abs/2510.21204) · [AutoGluon](https://github.com/autogluon/autogluon) · [Classifier](https://huggingface.co/autogluon/mitra-classifier) · [Regressor](https://huggingface.co/autogluon/mitra-regressor) |
-| ConTextTab | Semantic embeddings and real-table pretraining for tabular ICL. | [Paper](https://arxiv.org/abs/2506.10707) · [GitHub](https://github.com/SAP-samples/sap-rpt-1-oss) · [Weights](https://huggingface.co/SAP/sap-rpt-1-oss) |
-| TabSTAR | Target-aware representations for tables containing text fields. | [Paper](https://arxiv.org/abs/2505.18125) · [GitHub](https://github.com/alanarazi7/TabSTAR) · [Weights](https://huggingface.co/alana89/TabSTAR) |
-
-Compare the pretraining data, use of feature semantics, and adaptation procedure. TabSTAR studies transfer learning; the models here do not all use the same inference-only adaptation procedure.
-
-### TabArena
-
-[TabArena](https://arxiv.org/abs/2506.16791), a NeurIPS 2025 Datasets and Benchmarks spotlight, provides a maintained evaluation system. Read its validation and ensembling protocol before comparing results. Start with the [code](https://github.com/autogluon/tabarena), [datasets](https://github.com/tabarena/data-foundry), and [leaderboard](https://tabarena.ai/).
-
-## Related reading: agents and data science workflows
-
-TFMs provide predictions; agents can coordinate data preparation, model execution, and evaluation. These resources examine the surrounding workflow and the role of human judgment.
-
-| Resource | What to study | Status and sources |
-| --- | --- | --- |
-| Tabular Foundation Models, Agents, and Humans | A position paper on combining predictive models, workflow automation, and human expertise, including task definition and validation. | 2025 preprint; conference acceptance not verified. [Institutional record](https://ir.cwi.nl/pub/36086) · [Paper](https://ir.cwi.nl/pub/36086/36086.pdf) |
-| MLZero | An agent system that iterates on ML code using feedback and memory, across tabular and other data modalities. | NeurIPS 2025. [Proceedings](https://proceedings.neurips.cc/paper_files/paper/2025/hash/63ed15a46a143ff57484b38cd6b85d91-Abstract-Conference.html) · [Paper](https://arxiv.org/abs/2505.13941) · [GitHub](https://github.com/autogluon/autogluon-assistant) |
-
-For additional conference papers, search the [NeurIPS proceedings](https://proceedings.neurips.cc/). The repository's [model landscape](../README.md#model-landscape) covers models across venues and distinguishes paper dates from model releases.

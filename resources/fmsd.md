@@ -1,8 +1,8 @@
-# FMSD workshop resources
+# FMSD 2026 workshop resources
 
-[Tutorial home](../README.md) · [Interactive guide](https://affirm.github.io/tabular-foundation-models-tutorial/) · [NeurIPS resources](neurips.md)
+[Tutorial home](../README.md) · [Interactive guide](https://affirm.github.io/tabular-foundation-models-tutorial/) · [NeurIPS 2026 resources](neurips.md)
 
-Foundation Models for Structured Data (FMSD) is an ICML workshop covering tabular and time-series prediction. This collection connects our tutorial to the workshop's research discussions. Checked October 4, 2026.
+Foundation Models for Structured Data (FMSD) is an ICML workshop covering tabular and time-series prediction. This collection connects our tutorial to the 2026 workshop's research discussions. Checked October 4, 2026.
 
 ## Start with the workshop program
 
@@ -30,8 +30,6 @@ These entries are drawn from the workshop's [accepted papers](https://icml-struc
 
 For each paper, inspect its task definition, context construction, baselines, and evaluation splits. Follow author-provided code and data links from the paper record where available.
 
-## Earlier edition and hands-on study
-
-The [2025 workshop archive](https://icml-structured-fm-workshop.github.io/2025/) provides the first edition's program and research context.
+## Hands-on study
 
 For implementation work, pair the [TabICLv2 paper](https://arxiv.org/abs/2602.11139) with [official code and weights](https://github.com/soda-inria/tabicl), or study the smaller [nanoTabICL implementation](https://github.com/soda-inria/nanotabicl). Our [interactive guide](https://affirm.github.io/tabular-foundation-models-tutorial/) introduces the computation visually. The [benchmark collection](../README.md#benchmarks-and-evaluation) links to code, datasets, and evaluation protocols.
