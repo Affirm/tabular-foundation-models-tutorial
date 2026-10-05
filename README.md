@@ -1,6 +1,6 @@
 # Tabular Foundation Models Tutorial
 
-**[Interactive website](https://affirm.github.io/tabular-foundation-models-tutorial/)**
+🌐 **[Interactive website](https://affirm.github.io/tabular-foundation-models-tutorial/)**
 
 [Python notebook](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb) · [Our guide](#our-interactive-guide) · [Model landscape](#model-landscape) · [Learning resources](#tutorials-and-learning-resources) · [Conference resources](#conference-and-workshop-resources)
 
