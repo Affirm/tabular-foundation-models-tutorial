@@ -1,10 +1,16 @@
 # Tabular Foundation Models Tutorial
 
-[Interactive website](https://affirm.github.io/tabular-foundation-models-tutorial/) · [Python notebook](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb) · [Model landscape](#model-landscape) · [Learning resources](#tutorials-and-learning-resources)
+[Interactive website](https://affirm.github.io/tabular-foundation-models-tutorial/) · [Python notebook](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb) · [Our guide](#our-interactive-guide) · [Model landscape](#model-landscape) · [Learning resources](#tutorials-and-learning-resources) · [Conference resources](#conference-and-workshop-resources)
 
 Table as Prompt: An Interactive Guide to Tabular Foundation Models - accepted for presentation at the [NeurIPS 2026 Education Track](https://neurips.cc/Conferences/2026/CallforEducationalResources).
 
 ![Tabular Foundation Models Tutorial: Interactive Guide, Papers and Code, and Benchmarks. Tabular in-context learning uses labeled examples and a new row's features as inputs to a pretrained Transformer with fixed weights to predict the new row's label.](assets/tabular-tutorial-overview.png)
+
+## Our interactive guide
+
+Open the [guide](https://affirm.github.io/tabular-foundation-models-tutorial/) in a modern browser. Follow the sequence from tabular prediction and adaptation through PFN theory, TabICLv2 training, and inference. Then try the browser playground and inspect the model's intermediate computations. Basic supervised learning is enough to get started.
+
+TabICLv2 is the worked example. The guide distinguishes explanatory simulations from real model execution; browser inference runs locally. For a Python exercise, use the [notebook](materials/notebooks/01_tabicl_primer.ipynb) or [open it in Colab](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb). [Setup instructions](materials/README.md) cover the notebook environment.
 
 ## What are tabular foundation models?
 
@@ -39,11 +45,12 @@ Selected milestones through October 4, 2026. Each date links to a primary source
 | 2026-09-29 | [Kumo Tabular](https://github.com/NVIDIA/structured-data-models) · [![NVIDIA logo](https://avatars.githubusercontent.com/u/1728152?v=4&s=24) NVIDIA](https://github.com/NVIDIA) | Synthetic-data pretraining with column, row, and in-context attention for classification and regression. | [Release announcement](https://huggingface.co/blog/nvidia/kumo-tabular) | [GitHub](https://github.com/NVIDIA/structured-data-models) · [Hugging Face](https://huggingface.co/nvidia/Kumo-Tabular) |
 
 
-## Use the interactive guide
+## Conference and workshop resources
 
-Open the [guide](https://affirm.github.io/tabular-foundation-models-tutorial/) in a modern browser. Follow the sequence from tabular prediction and adaptation through PFN theory, TabICLv2 training, and inference. Then try the browser playground and inspect the model's intermediate computations. Basic supervised learning is enough to get started.
-
-TabICLv2 is the worked example. The guide distinguishes explanatory simulations from real model execution; browser inference runs locally. For a Python exercise, use the [notebook](materials/notebooks/01_tabicl_primer.ipynb) or [open it in Colab](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb). [Setup instructions](materials/README.md) cover the notebook environment.
+| Collection | What to explore |
+| --- | --- |
+| [NeurIPS resources](resources/neurips.md) | Our Education Track guide, related NeurIPS papers, model implementations, and benchmarks. |
+| [FMSD workshop resources](resources/fmsd.md) | Invited talks, selected papers, and research themes from the ICML workshop on Foundation Models for Structured Data. |
 
 ## Tutorials and learning resources
 
