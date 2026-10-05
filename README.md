@@ -1,6 +1,8 @@
 # Tabular Foundation Models Tutorial
 
-[Interactive website](https://affirm.github.io/tabular-foundation-models-tutorial/) · [Python notebook](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb) · [Our guide](#our-interactive-guide) · [Model landscape](#model-landscape) · [Learning resources](#tutorials-and-learning-resources) · [Conference resources](#conference-and-workshop-resources)
+**[Interactive website](https://affirm.github.io/tabular-foundation-models-tutorial/)**
+
+[Python notebook](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb) · [Our guide](#our-interactive-guide) · [Model landscape](#model-landscape) · [Learning resources](#tutorials-and-learning-resources) · [Conference resources](#conference-and-workshop-resources)
 
 Table as Prompt: An Interactive Guide to Tabular Foundation Models - accepted for presentation at the [NeurIPS 2026 Education Track](https://neurips.cc/Conferences/2026/CallforEducationalResources). [Read the paper (PDF, submission version)](materials/website/paper.pdf).
 
@@ -108,4 +110,8 @@ Open [localhost:8000](http://localhost:8000/). Serve over HTTP so that module wo
 
 [Browser model provenance](materials/website/model/PROVENANCE.md) documents the checkpoint and export. The [explorer README](materials/tabicl-explainer/README.md) credits the adaptation of Transformer Explainer.
 
-Unless otherwise noted, original software and code are licensed under the [Apache License, Version 2.0](LICENSE), and original educational content is licensed under [Creative Commons Attribution 4.0 International](LICENSE-CONTENT). Copyright (c) 2026, Affirm, Inc. All rights reserved. See [NOTICE](NOTICE) for the project notice and [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES) for the separate terms and attributions that apply to third-party software, model artifacts, adapted materials, and data.
+Unless otherwise noted, original tutorial materials, including prose, diagrams, notebook narrative, and original software/code, are available under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE-CONTENT). Original software/code is also available under the [Apache License, Version 2.0](LICENSE); users may choose either license for that original software/code.
+
+Third-party software, model artifacts, datasets, and adapted materials retain their separate terms; this dual-license grant does not relicense them. Affirm names and logos are excluded from these license grants. No trademark rights are granted.
+
+Copyright (c) 2026, Affirm, Inc. See [NOTICE](NOTICE) for the project notice and [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES) for third-party terms and attributions.
