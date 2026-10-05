@@ -6,12 +6,6 @@ Table as Prompt: An Interactive Guide to Tabular Foundation Models - accepted fo
 
 ![Tabular Foundation Models Tutorial: Interactive Guide, Papers and Code, and Benchmarks. Tabular in-context learning uses labeled examples and a new row's features as inputs to a pretrained Transformer with fixed weights to predict the new row's label.](assets/tabular-tutorial-overview.png)
 
-## Our interactive guide
-
-Open the [guide](https://affirm.github.io/tabular-foundation-models-tutorial/) in a modern browser. Follow the sequence from tabular prediction and adaptation through PFN theory, TabICLv2 training, and inference. Then try the browser playground and inspect the model's intermediate computations. Basic supervised learning is enough to get started.
-
-TabICLv2 is the worked example. The guide distinguishes explanatory simulations from real model execution; browser inference runs locally. For a Python exercise, use the [notebook](materials/notebooks/01_tabicl_primer.ipynb) or [open it in Colab](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb). [Setup instructions](materials/README.md) cover the notebook environment.
-
 ## What are tabular foundation models?
 
 Tabular foundation models (TFMs) are pretrained predictors designed for reuse across tabular datasets. Conventional workflows fit and often tune a separate model for each dataset. PFN-style TFMs pretrain a shared predictor across sampled tasks. At inference, labeled rows provide context for predicting unlabeled query rows, without task-specific gradient updates. This adaptation through examples is **tabular in-context learning**.
@@ -19,6 +13,12 @@ Tabular foundation models (TFMs) are pretrained predictors designed for reuse ac
 [Prior-data fitted networks (PFNs)](https://arxiv.org/abs/2112.10510) learn from tasks sampled from a prior. During pretraining, the model predicts held-out query labels from context rows. The task distribution and expected query loss shape its learned inductive bias. [TabPFN](https://arxiv.org/abs/2207.01848) demonstrated this approach for small tabular classification tasks. Our guide uses [TabICLv2](https://arxiv.org/abs/2602.11139) as a worked example; its architecture and inference procedure are model-specific, not shared by every TFM.
 
 The broader goal is reusable prediction for structured data. The field now covers classification and regression across different table sizes, with open questions about robustness, scale, efficiency, and evaluation. Strong task-specific methods, including boosted trees, remain baselines for assessing where these models help.
+
+## Our interactive guide
+
+Open the [guide](https://affirm.github.io/tabular-foundation-models-tutorial/) in a modern browser. Follow the sequence from tabular prediction and adaptation through PFN theory, TabICLv2 training, and inference. Then try the browser playground and inspect the model's intermediate computations. Basic supervised learning is enough to get started.
+
+TabICLv2 is the worked example. The guide distinguishes explanatory simulations from real model execution; browser inference runs locally. For a Python exercise, use the [notebook](materials/notebooks/01_tabicl_primer.ipynb) or [open it in Colab](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb). [Setup instructions](materials/README.md) cover the notebook environment.
 
 ## Model landscape
 
