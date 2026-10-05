@@ -10,6 +10,9 @@
 
 **Table as Prompt: An Interactive Guide to Tabular Foundation Models** - accepted for presentation at the [NeurIPS 2026 Education Track](https://neurips.cc/Conferences/2026/CallforEducationalResources). [Read the paper (PDF, submission version)](materials/website/paper.pdf).
 
+- **Our FMSD 2026 paper:** [Learned Sequence Representations over Raw Credit Events for Credit-Abuse Scoring (PDF)](materials/papers/learned-sequence-representations-credit-abuse.pdf).
+- **We are co-organizing [MFMB 2026](https://thebal.ai/mfmb2026/index.html):** the First Workshop on Multimodal and Foundation Models in Banking, at ACM ICAIF 2026 in Milan this November.
+
 ## What are tabular foundation models?
 
 Tabular foundation models (TFMs) are pretrained predictors designed for reuse across tabular datasets. Conventional workflows fit and often tune a separate model for each dataset. PFN-style TFMs pretrain a shared predictor across sampled tasks. At inference, labeled rows provide context for predicting unlabeled query rows, without task-specific gradient updates. This adaptation through examples is **tabular in-context learning**.
