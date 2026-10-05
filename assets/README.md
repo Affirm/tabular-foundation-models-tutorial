@@ -4,6 +4,8 @@
 October 5, 2026 from https://cdn-assets.affirm.com/images/logo-01-primary.png,
 linked by [Affirm's logo resource page](https://businesshub.affirm.com/hc/en-us/articles/4425266541204-Logos-Banners-and-Buttons).
 The original asset is 429 × 171 pixels and retains its original colors and transparency.
+Affirm names and logos are excluded from the project's CC BY 4.0 and Apache 2.0
+license grants. No trademark rights are granted.
 
 The footer of `tabular-tutorial-overview.png` uses this asset at 128 × 51 pixels,
 preserving its aspect ratio to the nearest pixel. Only the footer logo region was

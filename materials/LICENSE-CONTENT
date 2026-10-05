@@ -2,9 +2,14 @@ Creative Commons Attribution 4.0 International
 
 Copyright (c) 2026, Affirm, Inc.
 
-Unless otherwise noted, original educational content in this distribution,
-including tutorial prose, original diagrams, and notebook narrative, is
-licensed under the Creative Commons Attribution 4.0 International License.
+Unless otherwise noted, original tutorial materials in this distribution,
+including tutorial prose, original diagrams, notebook narrative, and original
+software/code, are licensed under the Creative Commons Attribution 4.0
+International License.
+
+Original software/code is additionally available under the Apache License,
+Version 2.0, reproduced in LICENSE. Users may choose either CC BY 4.0 or
+Apache 2.0 for that original software/code.
 
 License summary: https://creativecommons.org/licenses/by/4.0/
 Legal code: https://creativecommons.org/licenses/by/4.0/legalcode
@@ -15,6 +20,10 @@ Preferred attribution:
   Jiarui Xu, Tianming Zhou, Tommy Tai, Joshua Pan, Alexander Statnikov,
   and Nitesh Kumar, Affirm, Inc. (2026).
 
-This license does not apply to software or code, which is licensed separately,
-or to third-party software, model artifacts, datasets, and adapted materials.
-See LICENSE and THIRD_PARTY_NOTICES for those terms.
+This grant does not apply to third-party software, model artifacts, datasets,
+or adapted materials, which retain their separate terms. It does not relicense
+third-party portions of the browser runtime or adapted explorer.
+See THIRD_PARTY_NOTICES for those terms.
+
+Affirm names and logos are excluded from these license grants. No trademark
+rights are granted.

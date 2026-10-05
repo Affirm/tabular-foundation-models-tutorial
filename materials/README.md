@@ -78,9 +78,16 @@ JupyterLab is not part of the locked execution environment.
 
 ## Licensing
 
-Unless otherwise noted, original software and code in this standalone materials package are
-licensed under the [Apache License, Version 2.0](LICENSE), and original educational content is
-licensed under [Creative Commons Attribution 4.0 International](LICENSE-CONTENT). Copyright
-(c) 2026, Affirm, Inc. All rights reserved. See [NOTICE](NOTICE) and
+Unless otherwise noted, original tutorial materials in this standalone package, including
+prose, diagrams, notebook narrative, and original software/code, are available under
+[Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE-CONTENT). Original
+software/code is also available under the [Apache License, Version 2.0](LICENSE); users may
+choose either license for that original software/code.
+
+Third-party software, model artifacts, datasets, and adapted materials retain their separate
+terms; this dual-license grant does not relicense them. Affirm names and logos are excluded
+from these license grants. No trademark rights are granted.
+
+Copyright (c) 2026, Affirm, Inc. See [NOTICE](NOTICE) and
 [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES) for project and third-party terms, including those
 for the browser runtime, model artifact, adapted explorer, and datasets.
