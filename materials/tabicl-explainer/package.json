@@ -13,6 +13,7 @@
 		"@sveltejs/kit": "^2.53.3",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/d3": "^7.4.3",
+		"@types/node": "^20.19.43",
 		"autoprefixer": "^10.4.16",
 		"d3": "^7.9.0",
 		"postcss": "^8.4.33",

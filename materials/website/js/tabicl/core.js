@@ -1,4 +1,4 @@
-import { loadFlatTensors, loadManifestAndWeights } from "./tensor.js";
+import { loadFlatTensors, loadManifestAndBuffer, loadManifestAndWeights } from "./tensor.js";
 
 export class UpstreamTensorStore {
   constructor(manifest, tensors) {
@@ -33,8 +33,8 @@ export class CoreBackend {
   }
 
   static async fromBaseUrl(baseUrl, options = {}) {
-    const tensorStore = await UpstreamTensorStore.load(baseUrl, options);
-    return new CoreBackend({ task: tensorStore.task, tensorStore });
+    const { manifest, buffer } = await loadManifestAndBuffer(baseUrl, options);
+    return new CoreBackend().loadArtifact(manifest, buffer);
   }
 
   async loadArtifact(manifest, buffer) {
@@ -56,42 +56,38 @@ export class CoreBackend {
   }
 
   prepare(XTrain, yTrain, options = {}) {
-    if (this.model?.prepareContext && options.cacheMode === "repr") {
+    this.assertModel();
+    if (options.cacheMode === "repr") {
       throw new Error("repr cache mode is not implemented for the JavaScript core yet");
     }
-    if (this.model?.prepareContext) {
-      return { mode: options.cacheMode || "kv", native: this.model.prepareContext(XTrain, yTrain), options };
-    }
-    return { mode: options.cacheMode || null, XTrain, yTrain, options };
+    return { mode: options.cacheMode || "kv", native: this.model.prepareContext(XTrain, yTrain), options };
   }
 
   predictClassifier(XTrain, yTrain, XTest, nClasses) {
-    if (this.model?.predict) {
-      const logits = this.model.predict(XTrain, yTrain, XTest);
-      return logits.map((row) => row.slice(0, nClasses));
-    }
-    return heuristicClassifier(XTrain, yTrain, XTest, nClasses);
+    this.assertModel();
+    const logits = this.model.predict(XTrain, yTrain, XTest);
+    return logits.map((row) => row.slice(0, nClasses));
   }
 
   predictClassifierWithCache(cache, XTest, nClasses) {
-    if (this.model?.predictQueries && cache?.native) {
-      return this.model.predictQueries(cache.native, XTest).map((row) => row.slice(0, nClasses));
-    }
-    return this.predictClassifier(cache.XTrain, cache.yTrain, XTest, nClasses);
+    this.assertModel();
+    if (!cache?.native) throw new Error("A fitted model cache is required for prediction");
+    return this.model.predictQueries(cache.native, XTest).map((row) => row.slice(0, nClasses));
   }
 
   predictRegressor(XTrain, yTrain, XTest) {
-    if (this.model?.predict) {
-      return this.model.predict(XTrain, yTrain, XTest);
-    }
-    return heuristicRegressor(XTrain, yTrain, XTest);
+    this.assertModel();
+    return this.model.predict(XTrain, yTrain, XTest);
   }
 
   predictRegressorWithCache(cache, XTest) {
-    if (this.model?.predictQueries && cache?.native) {
-      return this.model.predictQueries(cache.native, XTest);
-    }
-    return this.predictRegressor(cache.XTrain, cache.yTrain, XTest);
+    this.assertModel();
+    if (!cache?.native) throw new Error("A fitted model cache is required for prediction");
+    return this.model.predictQueries(cache.native, XTest);
+  }
+
+  assertModel() {
+    if (!this.model) throw new Error("Load a model artifact before inference");
   }
 }
 
@@ -175,40 +171,4 @@ function translateUpstreamKey(key) {
   match = key.match(/^icl_predictor\.tf_icl\.blocks\.(\d+)\.(.*)$/);
   if (match) return `icl_blocks.${match[1]}.${mapTransformerBlockSuffix(match[2])}`;
   throw new Error(`Unmapped upstream tensor key: ${key}`);
-}
-
-function distanceSquared(a, b) {
-  let acc = 0;
-  for (let i = 0; i < a.length; i++) {
-    const delta = Number(a[i]) - Number(b[i]);
-    acc += delta * delta;
-  }
-  return acc;
-}
-
-function heuristicClassifier(XTrain, yTrain, XTest, nClasses) {
-  return XTest.map((row) => {
-    const logits = new Array(nClasses).fill(-8);
-    const weights = new Array(nClasses).fill(0);
-    for (let i = 0; i < XTrain.length; i++) {
-      const cls = Number(yTrain[i]);
-      const w = Math.exp(-distanceSquared(row, XTrain[i]));
-      if (Number.isInteger(cls) && cls >= 0 && cls < nClasses) weights[cls] += w;
-    }
-    for (let cls = 0; cls < nClasses; cls++) logits[cls] = Math.log(weights[cls] + 1e-6);
-    return logits;
-  });
-}
-
-function heuristicRegressor(XTrain, yTrain, XTest) {
-  return XTest.map((row) => {
-    let num = 0;
-    let den = 0;
-    for (let i = 0; i < XTrain.length; i++) {
-      const w = Math.exp(-distanceSquared(row, XTrain[i]));
-      num += w * Number(yTrain[i]);
-      den += w;
-    }
-    return den ? num / den : 0;
-  });
 }

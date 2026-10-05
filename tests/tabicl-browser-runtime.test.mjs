@@ -27,6 +27,66 @@ const X = [
 const y = [0, 0, 0, 0, 1, 1, 1, 1];
 const query = [[0.25, -0.15, 0.35]];
 
+test("an unloaded backend rejects inference instead of returning heuristic predictions", () => {
+  const backend = new CoreBackend();
+  for (const predict of [
+    () => backend.prepare(X, y),
+    () => backend.predictClassifier(X, y, query, 2),
+    () => backend.predictClassifierWithCache({ XTrain: X, yTrain: y }, query, 2),
+    () => backend.predictRegressor(X, y, query),
+    () => backend.predictRegressorWithCache({ XTrain: X, yTrain: y }, query),
+    () => new TabICLClassifier().fit(X, y).predictProba(query),
+  ]) {
+    assert.throws(predict, /Load a model artifact before inference/);
+  }
+});
+
+test("loading a backend from a URL creates an executable artifact model", async () => {
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+  const bytes = readFileSync(binaryPath);
+  const requests = [];
+  const backend = await CoreBackend.fromBaseUrl("https://example.test/model/", {
+    fetchImpl: async (url) => {
+      requests.push(url);
+      if (url.endsWith("/manifest.json")) return Response.json(manifest);
+      if (url.endsWith("/tabicl.bin")) return new Response(bytes);
+      throw new Error(`Unexpected model request: ${url}`);
+    },
+  });
+
+  assert.deepEqual(requests, [
+    "https://example.test/model/manifest.json",
+    "https://example.test/model/tabicl.bin",
+  ]);
+  const cache = backend.prepare(X, y);
+  const logits = backend.predictClassifierWithCache(cache, query, 2);
+  assert.equal(logits.length, 1);
+  assert.equal(logits[0].length, 2);
+  assert.ok(logits[0].every(Number.isFinite));
+  assert.throws(() => backend.predictClassifierWithCache({}, query, 2), /fitted model cache/);
+});
+
+test("backend downloads reject HTTP errors and altered model bytes", async () => {
+  await assert.rejects(CoreBackend.fromBaseUrl("https://example.test/model", {
+    fetchImpl: async () => new Response("Not found", { status: 404 }),
+  }), /Manifest download failed \(404\)/);
+
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+  await assert.rejects(CoreBackend.fromBaseUrl("https://example.test/model", {
+    fetchImpl: async (url) => url.endsWith("/manifest.json")
+      ? Response.json(manifest)
+      : new Response("Unavailable", { status: 503 }),
+  }), /Model download failed \(503\)/);
+
+  const alteredBytes = Buffer.from(readFileSync(binaryPath));
+  alteredBytes[0] ^= 1;
+  await assert.rejects(CoreBackend.fromBaseUrl("https://example.test/model", {
+    fetchImpl: async (url) => url.endsWith("/manifest.json")
+      ? Response.json(manifest)
+      : new Response(alteredBytes),
+  }), /SHA-256 mismatch/);
+});
+
 test("browser manifest translation is idempotent for stale mapped manifests", () => {
   const mapped = toNanoClassifierManifest({
     config: { embed_dim: 128, n_cls_cols: 4, feature_group_size: 3 },

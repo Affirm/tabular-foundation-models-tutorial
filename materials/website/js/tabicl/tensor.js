@@ -68,11 +68,24 @@ export function loadFlatTensors(manifest, buffer, { dequantize = true } = {}) {
   return tensors;
 }
 
-export async function loadManifestAndWeights(baseUrl, { fetchImpl = fetch, dequantize = true } = {}) {
-  const manifest = await (await fetchImpl(`${baseUrl.replace(/\/$/, "")}/manifest.json`)).json();
+export async function loadManifestAndBuffer(baseUrl, { fetchImpl = fetch } = {}) {
+  const root = baseUrl.replace(/\/$/, "");
+  const manifestResponse = await fetchImpl(`${root}/manifest.json`);
+  if (!manifestResponse.ok) throw new Error(`Manifest download failed (${manifestResponse.status})`);
+  const manifest = await manifestResponse.json();
   const binaryName = manifest.binary || manifest.bin || "tabicl.bin";
-  const buffer = await (await fetchImpl(`${baseUrl.replace(/\/$/, "")}/${binaryName}`)).arrayBuffer();
+  const binaryResponse = await fetchImpl(`${root}/${binaryName}`);
+  if (!binaryResponse.ok) throw new Error(`Model download failed (${binaryResponse.status})`);
+  const buffer = await binaryResponse.arrayBuffer();
+  if (manifest.total_bytes && buffer.byteLength !== manifest.total_bytes) {
+    throw new Error(`Model byte length ${buffer.byteLength} does not match manifest ${manifest.total_bytes}`);
+  }
   await verifySha256(buffer, manifest.binary_sha256, binaryName);
+  return { manifest, buffer };
+}
+
+export async function loadManifestAndWeights(baseUrl, { dequantize = true, ...options } = {}) {
+  const { manifest, buffer } = await loadManifestAndBuffer(baseUrl, options);
   return { manifest, tensors: loadFlatTensors(manifest, buffer, { dequantize }) };
 }
 
