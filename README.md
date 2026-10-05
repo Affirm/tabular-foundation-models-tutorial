@@ -8,7 +8,7 @@
 
 [Python notebook](https://colab.research.google.com/github/Affirm/tabular-foundation-models-tutorial/blob/main/materials/notebooks/01_tabicl_primer.ipynb) · [Our guide](#our-interactive-guide) · [Model landscape](#model-landscape) · [Learning resources](#tutorials-and-learning-resources) · [Conference resources](#conference-and-workshop-resources)
 
-Table as Prompt: An Interactive Guide to Tabular Foundation Models - accepted for presentation at the [NeurIPS 2026 Education Track](https://neurips.cc/Conferences/2026/CallforEducationalResources). [Read the paper (PDF, submission version)](materials/website/paper.pdf).
+**Table as Prompt: An Interactive Guide to Tabular Foundation Models** - accepted for presentation at the [NeurIPS 2026 Education Track](https://neurips.cc/Conferences/2026/CallforEducationalResources). [Read the paper (PDF, submission version)](materials/website/paper.pdf).
 
 ## What are tabular foundation models?
 
@@ -19,6 +19,8 @@ Tabular foundation models (TFMs) are pretrained predictors designed for reuse ac
 The broader goal is reusable prediction for structured data. The field now covers classification and regression across different table sizes, with open questions about robustness, scale, efficiency, and evaluation. Strong task-specific methods, including boosted trees, remain baselines for assessing where these models help.
 
 ## Our interactive guide
+
+![Tabular Foundation Models Tutorial: Interactive Guide, Papers and Code, and Benchmarks. Tabular in-context learning uses labeled examples and a new row's features as inputs to a pretrained Transformer with fixed weights to predict the new row's label.](assets/tabular-tutorial-overview.png)
 
 Open the [guide](https://affirm.github.io/tabular-foundation-models-tutorial/) in a modern browser. Follow the sequence from tabular prediction and adaptation through PFN theory, TabICLv2 training, and inference. Then try the browser playground and inspect the model's intermediate computations. Basic supervised learning is enough to get started.
 
