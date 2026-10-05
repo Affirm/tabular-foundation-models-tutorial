@@ -1,39 +1,39 @@
-name: Deploy TabICL website to GitHub Pages
+name: Validate and deploy tutorial website
 
 # Publishes materials/website as the repository's GitHub Pages site after
 # building the standalone Svelte explorer.
 
 on:
+  pull_request:
+    paths:
+      - "materials/website/**"
+      - "materials/tabicl-explainer/**"
+      - "tests/**"
+      - ".github/workflows/pages.yml"
   push:
     branches: [main]
     paths:
       - "materials/website/**"
       - "materials/tabicl-explainer/**"
+      - "tests/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 # Allow one concurrent deployment; don't cancel an in-progress publish.
 concurrency:
-  group: pages
+  group: pages-${{ github.event.pull_request.number || 'publish' }}
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  validate:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -42,18 +42,42 @@ jobs:
           cache: npm
           cache-dependency-path: materials/tabicl-explainer/package-lock.json
 
+      - name: Install explorer dependencies
+        working-directory: materials/tabicl-explainer
+        run: npm ci
+
+      - name: Check explorer types
+        working-directory: materials/tabicl-explainer
+        run: npm run check
+
+      - name: Test browser runtime
+        run: node --test tests/*.test.mjs
+
       - name: Build TabICL explorer
         working-directory: materials/tabicl-explainer
-        run: |
-          npm ci
-          npm run build
+        run: npm run build
 
       - name: Upload website artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload only the site folder so it becomes the Pages root;
           # all asset paths in index.html are relative to this dir.
           path: materials/website
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Deploy to GitHub Pages
         id: deployment

@@ -5,6 +5,7 @@
  * Pure vanilla, no build step.
  */
 import { predictKnn } from "./knn.js";
+import { recoverWorkerError } from "./playground-worker-state.js";
 import {
   classIndexFromProbability,
   contourSegments2d,
@@ -745,9 +746,14 @@ function ensureWorker() {
       updateModelUI();
       draw();
     } else if (m.type === "error") {
-      state.loading = false; state.gridBusy = false; updateModelUI();
+      if (!recoverWorkerError(state, m)) return;
+      updateModelUI(); updateReadout(); updateCompanion(); draw();
       if (state.model === "tfm") setStatus("error: " + m.message);
       console.error(m.message);
+      if ((m.requestType === "inspect" || m.requestType === "predict") && state.qQueued) {
+        state.qQueued = false;
+        requestQuery();
+      }
     }
   };
 }

@@ -6,7 +6,7 @@
  *   in  {type:'inspect', X, tag, viewIndex}   -> {type:'inspection', tag, proba, selectedViewProbability, selectedView, selectedViewTrace, attention, block, heads}
  *   in  {type:'grid', X, tag, chunk}          -> repeated {type:'gridChunk', tag, start, proba} then {type:'gridDone', tag}
  *   in  {type:'cancelGrid'}                    -> stop the current grid between chunks
- *   any failure                               -> {type:'error', message}
+ *   any failure                               -> {type:'error', requestType, tag, message}
  */
 import { TabICLClassifier } from "./classifier.js";
 import { CoreBackend } from "./core.js";
@@ -20,11 +20,14 @@ self.onmessage = async (e) => {
     if (m.type === "load") {
       if (backend) { self.postMessage({ type: "loaded", bytes: 0 }); return; }
       const base = new URL(m.modelBase || "../../model/", import.meta.url);
-      const manifest = await (await fetch(new URL("manifest.json", base), { cache: "no-store" })).json();
+      const manifestResponse = await fetch(new URL("manifest.json", base), { cache: "no-store" });
+      if (!manifestResponse.ok) throw new Error(`Manifest download failed (${manifestResponse.status})`);
+      const manifest = await manifestResponse.json();
       if (manifest.schema !== "tabicl-browser-js/flat-tensors-v1") {
         throw new Error("Expected the TabICLv2 browser manifest; clear the stale site cache and reload");
       }
       const resp = await fetch(new URL(manifest.binary || "tabicl.bin", base), { cache: "force-cache" });
+      if (!resp.ok) throw new Error(`Model download failed (${resp.status})`);
       const total = +(resp.headers.get("Content-Length") || 0);
       const reader = resp.body.getReader();
       const chunks = []; let loaded = 0;
@@ -40,13 +43,15 @@ self.onmessage = async (e) => {
         throw new Error(`Model byte length ${loaded} does not match manifest ${manifest.total_bytes}`);
       }
       await verifySha256(buf.buffer, manifest.binary_sha256, manifest.binary || "tabicl.bin");
-      backend = new CoreBackend({ task: "classifier" });
-      await backend.loadClassifierArtifact(manifest, buf.buffer);
+      const loadedBackend = new CoreBackend({ task: "classifier" });
+      await loadedBackend.loadClassifierArtifact(manifest, buf.buffer);
+      backend = loadedBackend;
       self.postMessage({ type: "loaded", bytes: loaded });
     } else if (m.type === "prepare") {
       activeGridTag = null;
+      estimator = null;
       if (!backend) throw new Error("Load the browser classifier before preparing context");
-      estimator = new TabICLClassifier({
+      const preparedEstimator = new TabICLClassifier({
         nEstimators: 8,
         normMethods: null,
         featShuffleMethod: "latin",
@@ -59,7 +64,8 @@ self.onmessage = async (e) => {
         randomState: 42,
         backend,
       });
-      estimator.fit(m.X, m.y, { kvCache: true });
+      preparedEstimator.fit(m.X, m.y, { kvCache: true });
+      estimator = preparedEstimator;
       self.postMessage({ type: "prepared", tag: m.tag, viewCount: 8 });
     } else if (m.type === "predict") {
       if (!estimator) throw new Error("Prepare the classifier before prediction");
@@ -103,6 +109,6 @@ self.onmessage = async (e) => {
       activeGridTag = null;
     }
   } catch (err) {
-    self.postMessage({ type: "error", message: String((err && err.stack) || err) });
+    self.postMessage({ type: "error", requestType: m.type, tag: m.tag, message: String((err && err.stack) || err) });
   }
 };

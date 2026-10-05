@@ -32,13 +32,23 @@ or Apple MPS on supported local hardware, with CPU as the fallback.
 
 ### Local or CI
 
+On macOS, XGBoost also needs the OpenMP runtime:
+
+```bash
+brew install libomp
+```
+
+Use Python and OpenMP for the same processor architecture. On Apple Silicon,
+use native `arm64` Python and Homebrew.
+
 Use Python 3.11 in a fresh virtual environment:
 
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install --require-hashes -r requirements-lock.txt
-jupyter lab notebooks/01_tabicl_primer.ipynb
+jupyter nbconvert notebooks/01_tabicl_primer.ipynb \
+  --to html --execute --ExecutePreprocessor.timeout=2400
 ```
 
 `requirements.txt` lists the direct dependencies; `requirements-lock.txt`
@@ -47,6 +57,17 @@ the exact reproducibility path; Colab is the convenience path. The
 notebook verifies its immutable Hugging Face revision and checkpoint checksum
 before model loading. An internet connection is needed for package, dataset,
 and checkpoint downloads.
+
+Open `notebooks/01_tabicl_primer.html` to inspect the executed notebook.
+The locked environment includes `nbconvert` and the Python kernel. To edit the
+notebook in JupyterLab, install the optional editor separately:
+
+```bash
+python -m pip install jupyterlab
+jupyter lab notebooks/01_tabicl_primer.ipynb
+```
+
+JupyterLab is not part of the locked execution environment.
 
 ## Source and attribution
 
