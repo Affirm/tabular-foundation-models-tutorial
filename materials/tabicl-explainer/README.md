@@ -1,6 +1,13 @@
 # TabICL Explainer
 
-Interactive visualization of TabICLv2 inference on fixed UCI Iris examples.
+Interactive visualization of TabICLv2 inference on selected
+[UCI Iris](https://archive.ics.uci.edu/dataset/53/iris) records.
+
+Dataset citation: Fisher, R. (1936). *Iris* [Dataset]. UCI Machine Learning
+Repository. [DOI: 10.24432/C56C76](https://doi.org/10.24432/C56C76).
+The dataset is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Measurements remain in centimeters; species names are encoded as numeric
+context labels, and query labels are withheld.
 
 The 12-row context is intentionally compact for tracing. It is outside the
 officially documented TabICLv2 pretraining range of 300 to 48K rows. The revised
@@ -67,3 +74,6 @@ preprocessing, permutations, and temperature 0.9.
 Checkpoint source, hashes, runtime behavior, and limitations are documented in
 [`../website/model/PROVENANCE.md`](../website/model/PROVENANCE.md). TabICL code
 and checkpoint terms remain governed by their upstream sources.
+
+The deployed site includes [third-party notices](../website/THIRD_PARTY_NOTICES.txt)
+and [full explorer dependency licenses](../website/licenses/EXPLORER-DEPENDENCIES.txt).

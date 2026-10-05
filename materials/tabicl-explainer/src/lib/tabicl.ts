@@ -6,6 +6,9 @@ import { verifySha256 } from '../../../website/js/tabicl/tensor.js';
 export const FEATURES = ['Sepal length', 'Sepal width', 'Petal length', 'Petal width'];
 export const CLASS_NAMES = ['Setosa', 'Versicolor', 'Virginica'];
 
+// Selected UCI Iris records: Fisher, R. (1936), DOI 10.24432/C56C76, CC BY 4.0.
+// Measurements remain in cm; species names are encoded as 0/1/2.
+// https://archive.ics.uci.edu/dataset/53/iris
 export const CONTEXT = [
 	{ id: 'E1', x: [5.1, 3.5, 1.4, 0.2], y: 0 },
 	{ id: 'E2', x: [4.9, 3.0, 1.4, 0.2], y: 0 },
