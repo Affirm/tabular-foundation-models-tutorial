@@ -1416,7 +1416,7 @@ function createTensorScene(canvas, render) {
     // The query's own representation participates in attention and residuals.
     // Its label is absent, but its features must not disappear from the graph.
     arrow(x + 76, queryY + 10, x + 149, queryY + 10, TECH.coral, 1.5);
-    mono("block 12 shown · query output only", x + 115, queryY + 37, 9, TECH.muted, "center", 700);
+    mono("block 12 shown · query output retained", x + 115, queryY + 37, 9, TECH.muted, "center", 700);
     return { outputX: x + 183, outputY: queryY + 10 };
   }
 
