@@ -32,6 +32,15 @@ or Apple MPS on supported local hardware, with CPU as the fallback.
 
 ### Local or CI
 
+On macOS, XGBoost also needs the OpenMP runtime:
+
+```bash
+brew install libomp
+```
+
+Use Python and OpenMP for the same processor architecture. On Apple Silicon,
+use native `arm64` Python and Homebrew.
+
 Use Python 3.11 in a fresh virtual environment:
 
 ```bash
