@@ -3,9 +3,11 @@
 Interactive visualization of TabICLv2 inference on fixed UCI Iris examples.
 
 The 12-row context is intentionally compact for tracing. It is outside the
-officially documented TabICLv2 pretraining range of 300 to 48K rows, and the
-upstream authors state that sub-300-row generalization has not been tested.
-Treat its measured output as an out-of-regime illustration, not a quality claim.
+officially documented TabICLv2 pretraining range of 300 to 48K rows. The revised
+paper includes sub-300-row few-shot evaluations
+([Appendix L.3–L.4, September 2026 revision](https://arxiv.org/html/2602.11139v2#A12.SS3)).
+Those results do not establish the quality of this particular 12-row Iris demo.
+Treat its measured output as an illustration of computation, not a quality claim.
 The interface adapts the MIT-licensed
 [Transformer Explainer](https://github.com/poloclub/transformer-explainer)
 layout while replacing GPT-2 generation with tabular in-context learning.
@@ -55,10 +57,12 @@ The original interface is used under the MIT License reproduced in
 
 This adaptation preserves the interface composition while replacing GPT
 inference and examples with fixed UCI Iris records and a browser TabICLv2
-checkpoint. The explorer uses a nanoTabICL-derived bridge for selected-view
-inspection with the released TabICLv2 checkpoint's feature-group offsets. It is
-not the standalone nanoTabICL model and does not expose every preprocessing and
-ensemble option in the official `TabICLClassifier`.
+checkpoint. The explorer uses a nanoTabICL-derived bridge for fixed single-pass
+core inspection with the released TabICLv2 checkpoint's feature-group offsets. It is
+not the standalone nanoTabICL model. It uses context-only z-score standardization,
+original feature and class order, and softmax temperature 1. It is not a selected
+view of the main playground's eight-view `TabICLClassifier`, which applies its own
+preprocessing, permutations, and temperature 0.9.
 
 Checkpoint source, hashes, runtime behavior, and limitations are documented in
 [`../website/model/PROVENANCE.md`](../website/model/PROVENANCE.md). TabICL code

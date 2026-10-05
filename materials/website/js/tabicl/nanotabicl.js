@@ -432,7 +432,7 @@ function cachedAttentionWeights(W, pfx, q, E, nHeads, cache, ssmax) {
 /* ---------------- full model ---------------- */
 export function buildModel(manifest, buffer) {
   // Backward-compatible bridge for the Svelte explainer only. It performs one
-  // selected-view core inspection, not browser classifier ensemble inference.
+  // fixed single-pass core inspection, not a selected classifier ensemble view.
   let runtimeManifest = manifest;
   if (manifest.schema === "tabicl-browser-js/flat-tensors-v1") {
     const adapted = toNanoClassifierManifest(manifest);
