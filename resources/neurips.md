@@ -1,6 +1,6 @@
 # NeurIPS 2026 resources for tabular foundation models
 
-[Tutorial home](../README.md) · [Interactive guide](https://affirm.github.io/tabular-foundation-models-tutorial/) · [FMSD 2026 workshop resources](fmsd.md)
+[Tutorial home](../README.md) · [Interactive guide](https://affirm.github.io/tabular-foundation-models-tutorial/) · [FMSD 2026 workshop](https://openreview.net/group?id=ICML.cc/2026/Workshop/FMSD#tab-your-consoles)
 
 Start with our interactive guide, then explore selected NeurIPS 2026 work on tabular models, broader prediction tasks, and evaluation. The collection below covers papers listed in the [official conference directory](https://neurips.cc/Downloads/2026). Checked October 5, 2026.
 
