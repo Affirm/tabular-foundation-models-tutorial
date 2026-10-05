@@ -20,8 +20,6 @@ The [Education Track website](https://neurips-education-track.github.io/) collec
 | TabClustPFN | Infer cluster assignments and the number of clusters using a PFN trained on synthetic clustering tasks. | [NeurIPS record](https://neurips.cc/virtual/2026/poster/150101) · [Paper](https://arxiv.org/abs/2601.21656) · [Code and checkpoint access](https://github.com/Tianqi-Zhao/TabClustPFN) |
 | SurvivalPFN | PFN pretraining for time-to-event prediction with right-censored observations. Study how the prior and prediction target change for survival analysis. | [NeurIPS record](https://neurips.cc/virtual/2026/poster/151336) · [Paper](https://arxiv.org/abs/2605.15488) · [GitHub](https://github.com/rgklab/SurvivalPFN) · [Weights](https://huggingface.co/shi-ang/SurvivalPFN) |
 
-FlexTab's paper announces code and checkpoints, but its linked repository was unavailable when checked. Use the paper for now.
-
 ## NeurIPS 2026 benchmarks and evaluation
 
 | Paper | What to study | Sources and resources |
