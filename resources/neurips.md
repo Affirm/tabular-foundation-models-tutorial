@@ -2,7 +2,7 @@
 
 [Tutorial home](../README.md) · [Interactive guide](https://affirm.github.io/tabular-foundation-models-tutorial/) · [FMSD workshop resources](fmsd.md)
 
-Start with our interactive guide, then explore selected NeurIPS 2026 work on tabular models, broader prediction tasks, and evaluation. The papers below appear in the [official 2026 conference directory](https://neurips.cc/Downloads/2026). Earlier work is collected separately at the end. Checked October 4, 2026.
+Start with our interactive guide, then explore selected NeurIPS 2026 work on tabular models, broader prediction tasks, and evaluation. The two 2026 sections below cover papers listed in the [official conference directory](https://neurips.cc/Downloads/2026). Earlier work and related reading are collected separately at the end. Checked October 4, 2026.
 
 ## Our guide at NeurIPS 2026
 
@@ -46,5 +46,14 @@ Compare the pretraining data, use of feature semantics, and adaptation procedure
 ### TabArena
 
 [TabArena](https://arxiv.org/abs/2506.16791), a NeurIPS 2025 Datasets and Benchmarks spotlight, provides a maintained evaluation system. Read its validation and ensembling protocol before comparing results. Start with the [code](https://github.com/autogluon/tabarena), [datasets](https://github.com/tabarena/data-foundry), and [leaderboard](https://tabarena.ai/).
+
+## Related reading: agents and data science workflows
+
+TFMs provide predictions; agents can coordinate data preparation, model execution, and evaluation. These resources examine the surrounding workflow and the role of human judgment.
+
+| Resource | What to study | Status and sources |
+| --- | --- | --- |
+| Tabular Foundation Models, Agents, and Humans | A position paper on combining predictive models, workflow automation, and human expertise, including task definition and validation. | 2025 preprint; conference acceptance not verified. [Institutional record](https://ir.cwi.nl/pub/36086) · [Paper](https://ir.cwi.nl/pub/36086/36086.pdf) |
+| MLZero | An agent system that iterates on ML code using feedback and memory, across tabular and other data modalities. | NeurIPS 2025. [Proceedings](https://proceedings.neurips.cc/paper_files/paper/2025/hash/63ed15a46a143ff57484b38cd6b85d91-Abstract-Conference.html) · [Paper](https://arxiv.org/abs/2505.13941) · [GitHub](https://github.com/autogluon/autogluon-assistant) |
 
 For additional conference papers, search the [NeurIPS proceedings](https://proceedings.neurips.cc/). The repository's [model landscape](../README.md#model-landscape) covers models across venues and distinguishes paper dates from model releases.
