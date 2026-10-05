@@ -1483,7 +1483,11 @@ function createNanoDemoTask() {
   const denominator = exponentials.reduce((sum, value) => sum + value, 0);
   const probabilities = exponentials.map((value) => value / denominator);
   const trueProbability = probabilities[y[9]];
-  return { X, y, trueProbability, loss: -Math.log(trueProbability) };
+  // Inference retains the task's active classes before softmax.
+  const activeExponentials = exponentials.slice(0, 2);
+  const activeDenominator = activeExponentials.reduce((sum, value) => sum + value, 0);
+  const inferenceProbabilities = activeExponentials.map((value) => value / activeDenominator);
+  return { X, y, trueProbability, loss: -Math.log(trueProbability), inferenceProbabilities };
 }
 
 const NANO_DEMO_TASK = createNanoDemoTask();
@@ -1675,25 +1679,30 @@ function initInferenceLive() {
       panel(628, 134, 268, 270, TECH.gold);
       mono("FROZEN OUTPUT HEAD", 762, 163, 12, TECH.gold, "center", 700);
       cube(691, 207, 122, 82, 17, "LN + MLP", "1×10 logits", TECH.coral);
-      ctxFillBars(v.ctx, 838, 203);
+      drawProbabilityBars(v.ctx, mono, 838, 285);
       mono("2 active classes", 762, 355, 13, TECH.gold, "center", 700);
+      mono("illustrative softmax₂", 762, 377, 11, TECH.muted, "center");
     }
   });
 
-  function ctxFillBars(ctx, x, y0) {
+  function drawProbabilityBars(ctx, mono, x, baseline) {
     ctx.fillStyle = "rgba(255,209,102,.24)";
     ctx.strokeStyle = TECH.gold;
-    ctx.fillRect(x, y0, 23, 48);
-    ctx.fillRect(x + 31, y0 + 19, 23, 29);
-    ctx.strokeRect(x, y0, 23, 48);
-    ctx.strokeRect(x + 31, y0 + 19, 23, 29);
+    NANO_DEMO_TASK.inferenceProbabilities.forEach((probability, classIndex) => {
+      const barX = x + classIndex * 31;
+      const height = probability * 72;
+      ctx.fillRect(barX, baseline - height, 23, height);
+      ctx.strokeRect(barX, baseline - height, 23, height);
+      mono(probability.toFixed(3), barX + 11.5, baseline - height - 9, 9, TECH.gold, "center", 700);
+      mono(`y=${classIndex}`, barX + 11.5, baseline + 18, 10, TECH.gold, "center", 700);
+    });
   }
 
   const details = [
     ["stage 1 · cells and cyclic grouping", "Standardize, group each feature position, then embed it", "Compute feature statistics from context rows. Under the paper/current nanoTabICL convention, position j gathers j, j+1, and j+3 modulo d; for d=4, x₁ maps to [x′₁, x′₂, x′₄]. A first y embedding is added to context cells only.", "10×4 + separate context y → z-score → 10×4×3 → 10×4×128"],
     ["stage 2 · column attention", "Attend vertically through context-derived inducing summaries", "In each of three blocks, one shared 128-vector bank is reused across feature columns. Inducing queries summarize context cells only; all cells, including the query, then read those summaries.", "10×4×128 → 10×4×128"],
     ["stage 3 · row compression", "Use three RoPE row blocks and retain four CLS outputs", "For every row, four learned CLS tokens precede four feature tokens. The first two blocks update all eight tokens; the last uses four CLS queries over all eight keys and values. LayerNorm and concatenation produce one 512D row token.", "10×8×128 → 10×4×128 → 10×512"],
-    ["stage 4 · dataset ICL and output", "Use labeled context tokens to answer the query", "After a second context-only y embedding, the first eleven ICL blocks update context and query tokens from context K/V; the final block returns queries only. LayerNorm and a two-layer MLP emit ten logits, then inference keeps the active classes. There is no loss or weight update.", "10×512 → 12 ICL blocks → LayerNorm → MLP → 1×10 logits → 2 active classes"],
+    ["stage 4 · dataset ICL and output", "Use labeled context tokens to answer the query", "After a second context-only y embedding, the first eleven ICL blocks update context and query tokens from context K/V; the final block returns queries only. LayerNorm and a two-layer MLP emit ten logits. Inference retains the two active classes before softmax. The bars use the same illustrative toy logits as the training diagram, not model predictions. There is no loss or weight update.", "10×512 → 12 ICL blocks → LayerNorm → MLP → 1×10 logits → 2 active logits → softmax₂"],
   ];
 
   function show(step) {
