@@ -77,9 +77,14 @@ These are selected entry points into PFN-based tabular prediction. Follow each p
 
 ## Benchmarks and evaluation
 
+Choose a benchmark for the capability you need to evaluate: predictive accuracy, generalization across data regimes, probabilistic predictions, or multimodal inputs.
+
 | Resource | What it offers | Sources |
 | --- | --- | --- |
 | TabArena | A maintained benchmark for comparing tabular models under documented evaluation settings. | [Paper](https://arxiv.org/abs/2506.16791) · [Code](https://github.com/autogluon/tabarena) · [Datasets](https://github.com/tabarena/data-foundry) · [Leaderboard](https://tabarena.ai/) |
+| BeyondArena | Generalization across IID, temporal, and grouped tasks, table sizes, and feature types. | [Paper](https://arxiv.org/abs/2606.30410) · [Code](https://github.com/autogluon/tabarena) · [Data Foundry](https://github.com/tabarena/data-foundry) |
+| ScoringBench | Probabilistic regression evaluated with proper scoring rules, including CRPS and interval scores, alongside point-prediction metrics. | [Paper](https://arxiv.org/abs/2603.29928) · [Code and data setup](https://github.com/jonaslandsgesell/ScoringBench) · [Leaderboard](https://scoringbench.com/) |
+| MulTaBench | Multimodal tabular learning with text and image inputs. | [Paper](https://arxiv.org/abs/2605.10616) · [Code and datasets](https://github.com/alanarazi7/MulTaBench) |
 | TALENT | A toolkit for comparing classical and deep tabular methods, with datasets and preprocessing options. | [Paper](https://www.jmlr.org/papers/v26/25-0512.html) · [Code and datasets](https://github.com/LAMDA-Tabular/TALENT) |
 | TabZilla | An empirical study of when neural networks and boosted trees perform well on tabular data. | [Paper](https://arxiv.org/abs/2305.02997) · [Code and datasets](https://github.com/naszilla/tabzilla) |
 
